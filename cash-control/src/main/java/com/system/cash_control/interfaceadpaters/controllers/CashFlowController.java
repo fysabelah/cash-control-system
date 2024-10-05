@@ -10,13 +10,13 @@ import com.system.cash_control.interfaceadpaters.presenter.dtos.CashFlowReport;
 import com.system.cash_control.utils.enums.CashFlowType;
 import com.system.cash_control.utils.exceptions.BusinessRuleException;
 import com.system.cash_control.utils.pagination.Pagination;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -99,6 +99,9 @@ public class CashFlowController {
         Map<String, BigDecimal> cashFlowGeneral = gateway.getGeneralCashFlowValues(cashierId);
 
         Map<String, BigDecimal> cashFlow = gateway.getCashFlowValues(cashierId, month, year);
+
+        Page<CashFlow> result = gateway.findAll(page, cashierId, month, year);
+
 
         return null;
     }

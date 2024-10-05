@@ -5,6 +5,10 @@ import com.system.cash_control.frameworks.db.CashFlowRepository;
 import com.system.cash_control.utils.MessageUtil;
 import com.system.cash_control.utils.enums.CashFlowType;
 import com.system.cash_control.utils.exceptions.BusinessRuleException;
+import com.system.cash_control.utils.pagination.Pagination;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -55,13 +59,27 @@ public class CashFlowGateway {
         BigDecimal generalCashIn = calculateCashFlowByType(cashierId, CashFlowType.E);
         BigDecimal generalCashOut = calculateCashFlowByType(cashierId, CashFlowType.S);
 
-        cashFlow.put(CashFlowType.S.name(), generalCashIn);
-        cashFlow.put(CashFlowType.E.name(), generalCashOut);
+        cashFlow.put(CashFlowType.E.name(), generalCashIn);
+        cashFlow.put(CashFlowType.S.name(), generalCashOut);
 
         return cashFlow;
     }
 
     public Map<String, BigDecimal> getCashFlowValues(Integer cashierId, Month month, String year) {
-        return repository.getCashFlowValues(cashierId, month, year);
+        Map<String, BigDecimal> cashFlow = HashMap.newHashMap(2);
+
+        BigDecimal generalCashIn = repository.getCashFlowValues(cashierId, month, year, CashFlowType.E);
+        BigDecimal generalCashOut = repository.getCashFlowValues(cashierId, month, year, CashFlowType.S);
+
+        cashFlow.put(CashFlowType.E.name(), generalCashIn);
+        cashFlow.put(CashFlowType.S.name(), generalCashOut);
+
+        return cashFlow;
+    }
+
+    public Page<CashFlow> findAll(Pagination page, Integer cashierId, Month month, String year) {
+        Pageable pageable = PageRequest.of(page.getPage(), page.getPageSize());
+
+        return repository.findAll(pageable, cashierId, month, year);
     }
 }
