@@ -18,7 +18,7 @@ public record CashFlowDto(
         String date,
 
         @NotBlank
-        @Schema(example = "Caixa da entrada")
+        @Schema(example = "Pagamento Boleto")
         String description,
 
         @PositiveOrZero

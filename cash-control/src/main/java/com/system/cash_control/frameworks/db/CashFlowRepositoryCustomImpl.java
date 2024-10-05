@@ -27,10 +27,9 @@ class CashFlowRepositoryCustomImpl implements CashFlowRepositoryCustom {
 
     @Override
     public CashFlow findFlowOfCashierCreation(Integer cashierId) throws BusinessRuleException {
-        String sql = "SELECT * " +
-                "FROM movimentacao AS mov" +
-                "WHERE mov.caixa_id = " + cashierId + " AND " +
-                "mov.id = (SELECT MIN(mov.id) FROM movimentacao AS mov WHERE mov.caixa_id = " + cashierId + ")";
+        String sql = "SELECT mov " +
+                "FROM CashFlow AS mov " +
+                "WHERE mov.id = (SELECT MIN(mov.id) FROM CashFlow AS mov WHERE mov.cashier.id = " + cashierId + ")";
 
         Query query = entityManager.createQuery(sql, CashFlow.class);
 

@@ -78,7 +78,7 @@ public class CashFlowController {
     }
 
     public CashFlowDto update(Integer id, CashFlowDto dto) {
-        CashFlow cashFlow = gateway.findById(id);
+        CashFlow cashFlow = gateway.findByIdAndCashier(id, dto.cashierId());
 
         cashFlow.setValue(dto.value());
         cashFlow.setType(dto.type());
@@ -96,13 +96,12 @@ public class CashFlowController {
     }
 
     public CashFlowReport findAll(Pagination page, Integer cashierId, Month month, String year) {
-        Map<String, BigDecimal> cashFlowGeneral = gateway.getGeneralCashFlowValues(cashierId);
+        Map<CashFlowType, BigDecimal> cashFlowGeneral = gateway.getGeneralCashFlowValues(cashierId);
 
-        Map<String, BigDecimal> cashFlow = gateway.getCashFlowValues(cashierId, month, year);
+        Map<CashFlowType, BigDecimal> cashFlow = gateway.getCashFlowValues(cashierId, month, year);
 
         Page<CashFlow> result = gateway.findAll(page, cashierId, month, year);
 
-
-        return null;
+        return presenter.convert(cashFlowGeneral, cashFlow, result);
     }
 }

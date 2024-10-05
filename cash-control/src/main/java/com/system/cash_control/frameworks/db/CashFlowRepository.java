@@ -14,4 +14,6 @@ public interface CashFlowRepository extends JpaRepository<CashFlow, Integer>, Ca
 
     @Query("SELECT SUM(mov.value) FROM CashFlow AS mov WHERE mov.cashier.id = ?1 AND mov.type = ?2")
     Optional<BigDecimal> calculateCashFlowByType(Integer cashierId, CashFlowType type);
+
+    Optional<CashFlow> findByIdAndCashierId(Integer cashierId, Integer cashierId1);
 }

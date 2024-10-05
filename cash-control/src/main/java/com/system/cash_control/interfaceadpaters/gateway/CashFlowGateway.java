@@ -53,26 +53,26 @@ public class CashFlowGateway {
                 .orElse(BigDecimal.ZERO);
     }
 
-    public Map<String, BigDecimal> getGeneralCashFlowValues(Integer cashierId) {
-        Map<String, BigDecimal> cashFlow = HashMap.newHashMap(2);
+    public Map<CashFlowType, BigDecimal> getGeneralCashFlowValues(Integer cashierId) {
+        Map<CashFlowType, BigDecimal> cashFlow = HashMap.newHashMap(2);
 
         BigDecimal generalCashIn = calculateCashFlowByType(cashierId, CashFlowType.E);
         BigDecimal generalCashOut = calculateCashFlowByType(cashierId, CashFlowType.S);
 
-        cashFlow.put(CashFlowType.E.name(), generalCashIn);
-        cashFlow.put(CashFlowType.S.name(), generalCashOut);
+        cashFlow.put(CashFlowType.E, generalCashIn);
+        cashFlow.put(CashFlowType.S, generalCashOut);
 
         return cashFlow;
     }
 
-    public Map<String, BigDecimal> getCashFlowValues(Integer cashierId, Month month, String year) {
-        Map<String, BigDecimal> cashFlow = HashMap.newHashMap(2);
+    public Map<CashFlowType, BigDecimal> getCashFlowValues(Integer cashierId, Month month, String year) {
+        Map<CashFlowType, BigDecimal> cashFlow = HashMap.newHashMap(2);
 
         BigDecimal generalCashIn = repository.getCashFlowValues(cashierId, month, year, CashFlowType.E);
         BigDecimal generalCashOut = repository.getCashFlowValues(cashierId, month, year, CashFlowType.S);
 
-        cashFlow.put(CashFlowType.E.name(), generalCashIn);
-        cashFlow.put(CashFlowType.S.name(), generalCashOut);
+        cashFlow.put(CashFlowType.E, generalCashIn);
+        cashFlow.put(CashFlowType.S, generalCashOut);
 
         return cashFlow;
     }
@@ -81,5 +81,12 @@ public class CashFlowGateway {
         Pageable pageable = PageRequest.of(page.getPage(), page.getPageSize());
 
         return repository.findAll(pageable, cashierId, month, year);
+    }
+
+    public CashFlow findByIdAndCashier(Integer cashFlowId, Integer cashierId) {
+        return repository.findByIdAndCashierId(cashierId, cashierId)
+                .orElseThrow(() ->
+                        new NoSuchElementException(MessageUtil.getMessage("CASH_FLOW_COMBINED_WITH_CASHIER_NOT_FOUND",
+                                cashFlowId.toString(), cashierId.toString())));
     }
 }
