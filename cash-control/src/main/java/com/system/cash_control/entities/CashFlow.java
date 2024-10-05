@@ -21,16 +21,17 @@ public class CashFlow {
     private Integer id;
 
     @Temporal(value = TemporalType.DATE)
-    @Column(name = "date")
+    @Column(name = "data")
     private LocalDate date;
 
     @Column(name = "descricao")
     private String description;
 
-    @Column(name = "valor")
+    @Column(name = "valor", precision = 15, scale = 4)
     private BigDecimal value;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "tipo")
     private CashFlowType type;
 
     @ManyToOne(optional = false)

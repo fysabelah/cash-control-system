@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -67,19 +69,37 @@ public class CashFlowController {
         gateway.insert(cashFlow);
     }
 
-    public void updateFirstCashFlow(Integer id, BigDecimal balance) {
-        // TODO criar implementação da atualização da saldo inicial
+    public void updateFirstCashFlow(Integer cashierId, BigDecimal balance) throws BusinessRuleException {
+        CashFlow cashFlow = gateway.findFlowOfCashierCreation(cashierId);
+
+        cashFlow.setValue(balance);
+
+        gateway.update(cashFlow);
     }
 
     public CashFlowDto update(Integer id, CashFlowDto dto) {
-        return null;
+        CashFlow cashFlow = gateway.findById(id);
+
+        cashFlow.setValue(dto.value());
+        cashFlow.setType(dto.type());
+        cashFlow.setDescription(dto.description());
+
+        cashFlow = gateway.update(cashFlow);
+
+        return presenter.convert(cashFlow);
     }
 
     public void delete(Integer id) {
+        gateway.findById(id);
 
+        gateway.delete(id);
     }
 
     public CashFlowReport findAll(Pagination page, Integer cashierId, Month month, String year) {
+        Map<String, BigDecimal> cashFlowGeneral = gateway.getGeneralCashFlowValues(cashierId);
+
+        Map<String, BigDecimal> cashFlow = gateway.getCashFlowValues(cashierId, month, year);
+
         return null;
     }
 }
