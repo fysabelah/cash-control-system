@@ -2,6 +2,7 @@ package com.system.cash_control.frameworks.web;
 
 import com.system.cash_control.interfaceadpaters.controllers.CashierController;
 import com.system.cash_control.interfaceadpaters.presenter.CashierDto;
+import com.system.cash_control.utils.exceptions.BusinessRuleException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Caixa")
 public class CashierWeb {
 
+    // TODO VALIDAR STATUS DE RETORNO E MENSAGEM EM EXCEÇÃO
+
     private final CashierController controller;
 
     public CashierWeb(CashierController controller) {
@@ -22,7 +25,7 @@ public class CashierWeb {
 
     @PostMapping
     @Operation(description = "Cadastrar caixa")
-    public ResponseEntity<CashierDto> insert(@Valid @RequestBody CashierDto cashier) {
+    public ResponseEntity<CashierDto> insert(@Valid @RequestBody CashierDto cashier) throws BusinessRuleException {
         return ResponseEntity.ok(controller.insert(cashier));
     }
 
@@ -33,9 +36,9 @@ public class CashierWeb {
     }
 
     @PutMapping(value = "/{id}")
-    @Operation(description = "Atualizar informações do caixa. O saldo inicial não é alterado")
+    @Operation(description = "Atualizar informações do caixa")
     public ResponseEntity<CashierDto> update(@Parameter(description = "Identificador do caixa") @PathVariable Integer id,
-                                             @Valid @RequestBody CashierDto dto) {
+                                             @Valid @RequestBody CashierDto dto) throws BusinessRuleException {
         return ResponseEntity.ok(controller.update(id, dto));
     }
 

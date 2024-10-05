@@ -3,6 +3,7 @@ package com.system.cash_control.entities;
 import com.system.cash_control.utils.enums.CashFlowType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "movimentacao")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class CashFlow {
 
     @Id
