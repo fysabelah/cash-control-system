@@ -36,7 +36,7 @@ public class ExceptionHandlerUtil {
     public ResponseEntity<StandardError> entityNotFound(NoSuchElementException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
 
-        StandardError error = setExceptionData(status.value(), "Entity Not Found", request.getRequestURI(), e.getMessage());
+        StandardError error = setExceptionData(status.value(), "Não encontrado", request.getRequestURI(), e.getMessage());
 
         return ResponseEntity.status(status).body(error);
     }

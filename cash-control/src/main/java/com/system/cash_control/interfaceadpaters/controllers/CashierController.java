@@ -2,7 +2,7 @@ package com.system.cash_control.interfaceadpaters.controllers;
 
 import com.system.cash_control.entities.Cashier;
 import com.system.cash_control.interfaceadpaters.gateway.CashierGateway;
-import com.system.cash_control.interfaceadpaters.presenter.CashierDto;
+import com.system.cash_control.interfaceadpaters.presenter.dtos.CashierDto;
 import com.system.cash_control.interfaceadpaters.presenter.CashierPresenter;
 import com.system.cash_control.utils.exceptions.BusinessRuleException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +16,13 @@ public class CashierController {
 
     private final CashierGateway gateway;
 
-    private final CashierFlowController cashierFlowController;
+    private final CashFlowController cashFlowController;
 
     @Autowired
-    public CashierController(CashierPresenter presenter, CashierGateway gateway, CashierFlowController cashierFlowController) {
+    public CashierController(CashierPresenter presenter, CashierGateway gateway, CashFlowController cashFlowController) {
         this.presenter = presenter;
         this.gateway = gateway;
-        this.cashierFlowController = cashierFlowController;
+        this.cashFlowController = cashFlowController;
     }
 
     @Transactional
@@ -31,7 +31,7 @@ public class CashierController {
 
         cashier = gateway.insert(cashier);
 
-        cashierFlowController.createFirstCash(cashier);
+        cashFlowController.createFirstCash(cashier);
 
         return presenter.convert(cashier);
     }
@@ -47,10 +47,9 @@ public class CashierController {
         cashier.setDescription(dto.description());
 
         if (!cashier.getOpeningBalance().equals(dto.balance())) {
-            cashierFlowController.updateFirstCashFlow(cashier.getId(), dto.balance());
+            cashFlowController.updateFirstCashFlow(cashier.getId(), dto.balance());
+            cashier.setOpeningBalance(dto.balance());
         }
-
-        cashier.setOpeningBalance(dto.balance());
 
         cashier = gateway.update(cashier);
 

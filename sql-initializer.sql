@@ -1,1 +1,1 @@
-CREATE DATABASE "cash-control-system";
+CREATE DATABASE "controlecaixa";

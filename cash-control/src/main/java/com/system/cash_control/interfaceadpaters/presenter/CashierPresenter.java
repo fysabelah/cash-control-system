@@ -1,6 +1,7 @@
 package com.system.cash_control.interfaceadpaters.presenter;
 
 import com.system.cash_control.entities.Cashier;
+import com.system.cash_control.interfaceadpaters.presenter.dtos.CashierDto;
 import com.system.cash_control.utils.exceptions.BusinessRuleException;
 import org.springframework.stereotype.Component;
 

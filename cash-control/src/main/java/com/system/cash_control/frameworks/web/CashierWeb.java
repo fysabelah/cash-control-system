@@ -1,7 +1,7 @@
 package com.system.cash_control.frameworks.web;
 
 import com.system.cash_control.interfaceadpaters.controllers.CashierController;
-import com.system.cash_control.interfaceadpaters.presenter.CashierDto;
+import com.system.cash_control.interfaceadpaters.presenter.dtos.CashierDto;
 import com.system.cash_control.utils.exceptions.BusinessRuleException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/cashier")
 @Tag(name = "Caixa")
 public class CashierWeb {
-
-    // TODO VALIDAR STATUS DE RETORNO E MENSAGEM EM EXCEÇÃO
 
     private final CashierController controller;
 

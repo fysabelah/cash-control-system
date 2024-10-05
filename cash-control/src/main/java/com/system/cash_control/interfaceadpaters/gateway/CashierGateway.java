@@ -6,6 +6,7 @@ import com.system.cash_control.utils.MessageUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class CashierGateway {
@@ -25,9 +26,13 @@ public class CashierGateway {
     }
 
     public Cashier findById(Integer id) {
-        return repository.findByIdAndDeleted(id, false)
+        return findByIdOptional(id)
                 .orElseThrow(() ->
                         new NoSuchElementException(MessageUtil.getMessage("CASHIER_NOT_FOUND", id.toString())));
+    }
+
+    public Optional<Cashier> findByIdOptional(Integer id) {
+        return repository.findByIdAndDeleted(id, false);
     }
 
     public void delete(Cashier cashier) {
