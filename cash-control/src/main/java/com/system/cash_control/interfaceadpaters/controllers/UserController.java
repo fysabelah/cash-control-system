@@ -2,13 +2,13 @@ package com.system.cash_control.interfaceadpaters.controllers;
 
 import com.system.cash_control.entities.User;
 import com.system.cash_control.interfaceadpaters.gateway.UserGateway;
+import com.system.cash_control.interfaceadpaters.presenter.dtos.LoginDto;
 import com.system.cash_control.interfaceadpaters.presenter.dtos.UserDto;
 import com.system.cash_control.usercase.UserBusiness;
 import com.system.cash_control.utils.exceptions.BusinessRuleException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Base64;
 import java.util.Optional;
 
 @Component
@@ -32,15 +32,11 @@ public class UserController {
         gateway.insert(user);
     }
 
-    public String getToken(String authorization) throws BusinessRuleException {
-        if (authorization == null || authorization.isBlank()) {
-            throw new BusinessRuleException("MISSING_AUTHORIZATION_HEADER");
-        }
+    public LoginDto getToken(String username, String encodePassword) throws BusinessRuleException {
+        Optional<User> optional = gateway.findByUsername(username);
 
-        String decodedAuthorization = new String(Base64.getDecoder().decode(authorization));
+        business.validateUserProvide(encodePassword, optional);
 
-        String username = decodedAuthorization.split(" ")[0];
-
-        return null;
+        return business.createToken(username);
     }
 }

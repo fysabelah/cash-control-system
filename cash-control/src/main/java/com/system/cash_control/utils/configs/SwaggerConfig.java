@@ -14,8 +14,6 @@ public class SwaggerConfig {
 
     private static final String SCHEME_NAME_BEARER = "bearerAuth";
 
-    private static final String SCHEME_NAME_BASIC = "basicAuth";
-
     @Bean
     public OpenAPI apiDocConfig() {
         return new OpenAPI()
@@ -34,11 +32,6 @@ public class SwaggerConfig {
                                         .bearerFormat("JWT")
                                         .in(SecurityScheme.In.HEADER)
                                         .scheme("bearer")
-                                ).addSecuritySchemes(SCHEME_NAME_BASIC, new SecurityScheme()
-                                        .name(SCHEME_NAME_BASIC)
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("basic")
-                                        .in(SecurityScheme.In.HEADER)
                                 )
                 );
     }
