@@ -1,6 +1,6 @@
 # Sistema de Controle de Caixa
 
-Um sistema de controle de caixa com controle de autenção e relatório de movimentação.
+Um sistema de controle de caixa com controle de autenticação e relatório de movimentação.
 
 Neste documento, você encontrará informações para execução completa do projeto, caso esteja em dúvida sobre algo,
 verifique o README.md de cada projeto.
