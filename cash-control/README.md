@@ -1,9 +1,21 @@
-# Sistema de Controle de Caixa
+# Sistema de Controle de Caixa - API
 
 Um sistema de controle de caixa com controle de autenção e relatório de movimentação.
 
-Neste documento, você encontrará informações para execução completa do projeto, caso esteja em dúvida sobre algo,
-verifique o README.md de cada projeto.
+## Decisões / Conselhos / Possíveis Melhorias
+
+* Este projeto faz uso de armazenamento das chaves responsáveis pela geração do token JWT. Está pode não ser a melhor
+  abordagem, inclusive devido ao ambiente onde este poderia está executando. Talvez seria mais interessante salvar em
+  algum provedor de nuvem, por exemplo, e recuperar as chaves.
+* A consulta que gerar basicamente um relatório de movimentações, dependendo da quantidade, pode se tornar bastante
+  onerosa, o que torna interessante setar um range máximo para consulta.
+* Justamente pelo ponto anterior comentando, durante uma consulta para algo similiar a um relatório de movimentação,
+  está sendo recuperado todas informações de uma única vez, dependo da quantidde isto poderia ter um retorno bem
+  demorado, inclusive levando a timeout. Talvez uma abordagem mais interessante seria particionar a recuperação das
+  informações conforme a tela, considerando a utilização de front, está sendo rederizada.
+* As decisões foram tomadas considerando um escopo menor, porém neste consulta de relatório, mesmo assim, foi setado
+  limite para tamanho da página. Entranto, a consulta que varifica a quantidade total não é paginada, o que poderia
+  resultar em problemas.
 
 ## Tecnologias
 
@@ -21,7 +33,8 @@ git clone git@github.com:fysabelah/cash-control-system.git
 ```
 
 Após, temos duas opções, abrir o projeto em alguma IDE e utilizar o terminal integrado ou abrir a pasta inicial do
-projeto em um terminal.
+projeto em um terminal. Se você tiver executando a partir do diretório deste projeto, remova o 'cash-control' do
+comando.
 
 O comando irá criar um par de chaves, pública e privada, para geração do token JWT. Durante o processo será solicitado
 uma senha, guarde o valor, pois será utilizado posteriomente. Considerando que esteja na pasta principal,
@@ -34,6 +47,9 @@ cash-control-system/, digite o comando abaixo.
 2. Para uma maior praticidade, foi criado o arquivo compose. O mesmo pode ser encontrado com o nome
    *docker-compose.yaml*. São utilizadas algumas vaviráveis de ambiente e por isso devemos criar o arquivo como nome
    _.env_ também no diretório princial.
+
+   *Obs.*: Para desenvolvimento, também crie o arquivo no diretório deste projeto. Com exceção das chaves sobre
+   _PgAdmin_, elas serão necessárias.
 
    *Obs*: Deixarei os valores utilizados por mim para praticidade em execução, porém sinta-se a vontade para alterar.
    Apenas atente-se que campos como, por exemplo, referente ao banco de dados está sendo utilizado em outros lugares. A
