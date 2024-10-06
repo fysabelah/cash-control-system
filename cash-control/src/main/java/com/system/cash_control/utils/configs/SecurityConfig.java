@@ -2,7 +2,6 @@ package com.system.cash_control.utils.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +21,10 @@ public class SecurityConfig {
             "/doc/**"
     };
 
+    private static final String[] AUTH_WHITELIST_ENDPOINTS = {
+            "/user/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -31,7 +34,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST_DOCUMENTATION).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/user").permitAll()
+                        .requestMatchers(AUTH_WHITELIST_ENDPOINTS).permitAll()
                         .anyRequest().authenticated());
 
         return http.build();

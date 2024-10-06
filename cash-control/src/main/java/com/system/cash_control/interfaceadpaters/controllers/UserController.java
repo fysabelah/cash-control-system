@@ -8,6 +8,7 @@ import com.system.cash_control.utils.exceptions.BusinessRuleException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Base64;
 import java.util.Optional;
 
 @Component
@@ -31,7 +32,15 @@ public class UserController {
         gateway.insert(user);
     }
 
-    public String getToken(String header) {
+    public String getToken(String authorization) throws BusinessRuleException {
+        if (authorization == null || authorization.isBlank()) {
+            throw new BusinessRuleException("MISSING_AUTHORIZATION_HEADER");
+        }
+
+        String decodedAuthorization = new String(Base64.getDecoder().decode(authorization));
+
+        String username = decodedAuthorization.split(" ")[0];
+
         return null;
     }
 }

@@ -4,6 +4,7 @@ import com.system.cash_control.utils.MessageUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -81,5 +82,17 @@ public class ExceptionHandlerUtil {
                         request.getRequestURI(),
                         message
                 ));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<StandardError> notAuthorized(Exception e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+
+        return ResponseEntity.status(status)
+                .body(setExceptionData(status.value(),
+                        "Acesso Bloqueado",
+                        request.getRequestURI(),
+                        e.getMessage()));
     }
 }
