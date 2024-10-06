@@ -28,7 +28,7 @@ uma senha, guarde o valor, pois será utilizado posteriomente. Considerando que 
 cash-control-system/, digite o comando abaixo.
 
 ```
- keytool -genkeypair -alias jwt-key-2 -keyalg RSA -keysize 2048 -keystore cash-control/src/main/resources/jwt.jks -validity 3650
+ keytool -genkeypair -alias jwt-key -keyalg RSA -keysize 2048 -keystore cash-control/src/main/resources/jwt.jks -validity 3650
 ```
 
 2. Para uma maior praticidade, foi criado o arquivo compose. O mesmo pode ser encontrado com o nome
