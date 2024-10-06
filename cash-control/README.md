@@ -1,6 +1,6 @@
 # Sistema de Controle de Caixa - API
 
-Um sistema de controle de caixa com controle de autenção e relatório de movimentação.
+Um sistema de controle de caixa com controle de autenticação e relatório de movimentação.
 
 ## Decisões / Conselhos / Possíveis Melhorias
 
