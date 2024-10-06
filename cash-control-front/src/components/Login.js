@@ -16,24 +16,58 @@ export default function Login({buttonName}) {
         setPassword(event.target.value);
     }
 
-    const sendLoginRequest = async (e) => {
-        e.preventDefault();
+    const sendLoginRequest = async () => {
+        return await fetch('/api/user/token?username=' + username + "&password=" + btoa(password), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+
+    const createUser = async () => {
+        return await fetch('/api/user', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: btoa(password)
+            })
+        });
+    }
+
+    const sendRequest = async (event) => {
+        event.preventDefault();
         try {
-            const response = await fetch('/api/user/token?username=' + username + "&password=" + btoa(password), {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            });
+            let response;
 
-            const data = await response.json();
-
-            if (response.ok) {
-                localStorage.setItem("token", data.token);
-                navigate('/caixa');
+            if (buttonName === 'Cadastrar') {
+                response = await createUser();
             } else {
-                alert(data.message);
+                response = await sendLoginRequest();
+            }
+
+            if (buttonName === 'Cadastrar') {
+                if (response.ok) {
+                    alert('Usuário cadastrado com sucesso!');
+                    window.location.reload();
+                } else {
+                    const data = await response.json();
+                    alert(data.message);
+                }
+            } else {
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem("token", data.token);
+                    navigate('/caixa');
+                } else {
+                    alert(data.message);
+                }
             }
         } catch (error) {
             console.log(error);
@@ -60,7 +94,7 @@ export default function Login({buttonName}) {
                     </div>
                 </div>
                 <div className="ButtonDiv">
-                    <button onClick={sendLoginRequest}>{buttonName}</button>
+                    <button onClick={sendRequest}>{buttonName}</button>
                 </div>
             </form>
         </div>

@@ -6,7 +6,7 @@ function Navigation() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route element={<Home/>} path="/caixa"/>
+                <Route element={<Home/>} path="/" exact/>
             </Routes>
         </BrowserRouter>
     )
