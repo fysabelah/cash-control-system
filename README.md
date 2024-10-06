@@ -35,9 +35,9 @@ cash-control-system/, digite o comando abaixo.
    *docker-compose.yaml*. São utilizadas algumas vaviráveis de ambiente e por isso devemos criar o arquivo como nome
    _.env_ também no diretório princial.
 
-   *Obs*: Deixarei os valores utilizados por mim para praticidade em execução, porém sinta-se a vontade para alterar.
-   Apenas atente-se que campos como, por exemplo, referente ao banco de dados está sendo utilizado em outros lugares. A
-   chave JWT_DECODE deve ser alterada pelo BASE64 do valor digitado ao executar o comando **keytool**.
+Obs: Deixarei os valores utilizados por mim para praticidade em execução, porém sinta-se a vontade para alterar.
+Apenas atente-se que campos como, por exemplo, referente ao banco de dados está sendo utilizado em outros lugares. A
+chave JWT_DECODE deve ser alterada pelo BASE64 do valor digitado ao executar o comando **keytool**.
 
 ```
 # PostreSQL
@@ -78,4 +78,5 @@ docker compose up
 
 Considerando tudo configurado como esperado, deve ser possível acessar os endpoint abaixos.
 
-* [Documentação](http://localhost:8080/doc/api.html)
+* [Swagger](http://localhost:8080/doc/api.html)
+* [Documentação](http://localhost:8080/documentation)

@@ -41,19 +41,19 @@ uma senha, guarde o valor, pois será utilizado posteriomente. Considerando que 
 cash-control-system/, digite o comando abaixo.
 
 ```
- keytool -genkeypair -alias jwt-key-2 -keyalg RSA -keysize 2048 -keystore cash-control/src/main/resources/jwt.jks -validity 3650
+keytool -genkeypair -alias jwt-key -keyalg RSA -keysize 2048 -keystore cash-control/src/main/resources/jwt.jks -validity 3650
 ```
 
 2. Para uma maior praticidade, foi criado o arquivo compose. O mesmo pode ser encontrado com o nome
    *docker-compose.yaml*. São utilizadas algumas vaviráveis de ambiente e por isso devemos criar o arquivo como nome
    _.env_ também no diretório princial.
 
-   *Obs.*: Para desenvolvimento, também crie o arquivo no diretório deste projeto. Com exceção das chaves sobre
-   _PgAdmin_, elas serão necessárias.
+**Obs.**: Para desenvolvimento, também crie o arquivo no diretório deste projeto. Com exceção das chaves sobre
+_PgAdmin_, elas serão necessárias.
 
-   *Obs*: Deixarei os valores utilizados por mim para praticidade em execução, porém sinta-se a vontade para alterar.
-   Apenas atente-se que campos como, por exemplo, referente ao banco de dados está sendo utilizado em outros lugares. A
-   chave JWT_DECODE deve ser alterada pelo BASE64 do valor digitado ao executar o comando **keytool**.
+**Obs**: Deixarei os valores utilizados por mim para praticidade em execução, porém sinta-se a vontade para alterar.
+Apenas atente-se que campos como, por exemplo, referente ao banco de dados está sendo utilizado em outros lugares. A
+chave JWT_DECODE deve ser alterada pelo BASE64 do valor digitado ao executar o comando **keytool**.
 
 ```
 # PostreSQL
@@ -94,4 +94,5 @@ docker compose up
 
 Considerando tudo configurado como esperado, deve ser possível acessar os endpoint abaixos.
 
-* [Documentação](http://localhost:8080/doc/api.html)
+* [Swagger](http://localhost:8080/doc/api.html)
+* [Documentação](http://localhost:8080/documentation)
