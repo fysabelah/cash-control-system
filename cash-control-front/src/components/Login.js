@@ -1,9 +1,12 @@
 import React from "react";
 import "../styles/Login.css";
+import {useNavigate} from 'react-router-dom';
 
-export default function Login() {
+
+export default function Login({buttonName}) {
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
+    const navigate = useNavigate();
 
     function updateUsername(event) {
         setUsername(event.target.value);
@@ -13,32 +16,28 @@ export default function Login() {
         setPassword(event.target.value);
     }
 
-    function sendLoginRequest() {
-        const response = fetch('/api/user', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                password: btoa(password)
-            })
-        })
+    const sendLoginRequest = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('/api/user/token?username=' + username + "&password=" + btoa(password), {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
 
-        console.log(response);
+            const data = await response.json();
 
-        alert(response);
-
-        /*.then((response) => {
             if (response.ok) {
-                console.log(response);
+                localStorage.setItem("token", data.token);
+                navigate('/caixa');
             } else {
-                console.log('deu ruim ');
-                console.log(response)
-                console.log(response)
+                alert(data.message);
             }
-        })*/
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
@@ -61,7 +60,7 @@ export default function Login() {
                     </div>
                 </div>
                 <div className="ButtonDiv">
-                    <button onClick={sendLoginRequest}>Enviar</button>
+                    <button onClick={sendLoginRequest}>{buttonName}</button>
                 </div>
             </form>
         </div>

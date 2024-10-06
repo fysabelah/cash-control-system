@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: inherit;
 }
 
 .LoginForm {
@@ -51,5 +51,5 @@
     font-size: 16px;
     box-sizing: border-box;
     outline: none;
-    transition: border-color 0.3s ease;  /* Add a transition effect */
+    transition: border-color 0.3s ease;
 }
