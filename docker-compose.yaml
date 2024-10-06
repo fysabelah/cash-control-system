@@ -31,6 +31,25 @@ services:
     networks:
       - cash-control-system
 
+  cash-control-api:
+    image: cash-control-api:1.0.0
+    build:
+      context: ./cash-control
+    container_name: cash-control
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    networks:
+      - cash-control-system
+    environment:
+      POSTGRES_DATABASE_USERNAME: ${POSTGRES_DATABASE_USERNAME}
+      POSTGRES_DATABASE_PASSWORD: ${POSTGRES_DATABASE_PASSWORD}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_NAME: controlecaixa
+      USERNAME_SYSTEM: ${USERNAME_SYSTEM}
+      PASSWORD_SYSTEM: ${PASSWORD_SYSTEM}
+      JWT_DECODE: ${JWT_DECODE}
+
 networks:
   cash-control-system:
 
