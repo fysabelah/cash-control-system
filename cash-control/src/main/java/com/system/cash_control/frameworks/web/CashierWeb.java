@@ -3,6 +3,8 @@ package com.system.cash_control.frameworks.web;
 import com.system.cash_control.interfaceadpaters.controllers.CashierController;
 import com.system.cash_control.interfaceadpaters.presenter.dtos.CashierDto;
 import com.system.cash_control.utils.exceptions.BusinessRuleException;
+import com.system.cash_control.utils.pagination.PagedResult;
+import com.system.cash_control.utils.pagination.Pagination;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,5 +48,17 @@ public class CashierWeb {
         controller.delete(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(description = "Recuperar caixas")
+    @GetMapping
+    public ResponseEntity<PagedResult<CashierDto>> findAll(@Parameter(description = "Tamanho da página") @RequestParam(required = false) Integer pageSize,
+                                                           @Parameter(description = "Página") @RequestParam(required = false) Integer initialPage,
+                                                           @Parameter(description = "Identificador do caixa") @RequestParam(required = false) Integer cashierId,
+                                                           @Parameter(description = "Descrição") @RequestParam(required = false) String description) {
+        Pagination page = new Pagination(initialPage, pageSize);
+
+        return ResponseEntity.ok(controller.findAll(page, cashierId, description));
+
     }
 }

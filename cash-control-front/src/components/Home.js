@@ -21,8 +21,7 @@ function Home() {
                 <p onClick={updateButtonNames}>{homeButtonName}</p>
             </div>
         </div>
-    )
-
+    );
 }
 
 export default Home;

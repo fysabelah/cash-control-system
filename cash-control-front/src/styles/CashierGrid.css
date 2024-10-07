@@ -1,0 +1,88 @@
+.CashierGrid {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 700px;
+    margin: auto;
+    height: inherit;
+}
+
+.CashierFilters {
+    display: flex;
+    flex-direction: row;
+    padding: 30px;
+    width: inherit;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.CashierFilters input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.CashierFilters input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.CashierFilters button {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    width: 100px;
+    color: white;
+    cursor: pointer;
+    background-color: #216796;
+}
+
+.CashierGridTitle {
+    background-color: #1a5176;
+    padding: 10px;
+    width: inherit;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    color: white;
+}
+
+.CashierTable {
+    width: inherit;
+}
+
+.CashierTable table {
+    width: inherit;
+}
+
+.CashierGridPagination {
+    width: inherit;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 30px;
+}
+
+.buttonPage {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.buttonTable {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.buttonTable button {
+
+}

@@ -45,28 +45,30 @@ export default function Login({buttonName}) {
         try {
             let response;
 
-            if (buttonName === 'Cadastrar') {
-                response = await createUser();
-            } else {
-                response = await sendLoginRequest();
-            }
+            if (username && password) {
+                if (buttonName === 'Cadastrar') {
+                    response = await createUser();
+                } else {
+                    response = await sendLoginRequest();
+                }
 
-            if (buttonName === 'Cadastrar') {
-                if (response.ok) {
-                    alert('Usuário cadastrado com sucesso!');
-                    window.location.reload();
+                if (buttonName === 'Cadastrar') {
+                    if (response.ok) {
+                        alert('Usuário cadastrado com sucesso!');
+                        window.location.reload();
+                    } else {
+                        const data = await response.json();
+                        alert(data.message);
+                    }
                 } else {
                     const data = await response.json();
-                    alert(data.message);
-                }
-            } else {
-                const data = await response.json();
 
-                if (response.ok) {
-                    localStorage.setItem("token", data.token);
-                    navigate('/caixa');
-                } else {
-                    alert(data.message);
+                    if (response.ok) {
+                        localStorage.setItem("token", data.token);
+                        navigate('/caixa');
+                    } else {
+                        alert(data.message);
+                    }
                 }
             }
         } catch (error) {

@@ -2,10 +2,16 @@ package com.system.cash_control.interfaceadpaters.controllers;
 
 import com.system.cash_control.entities.Cashier;
 import com.system.cash_control.interfaceadpaters.gateway.CashierGateway;
-import com.system.cash_control.interfaceadpaters.presenter.dtos.CashierDto;
 import com.system.cash_control.interfaceadpaters.presenter.CashierPresenter;
+import com.system.cash_control.interfaceadpaters.presenter.dtos.CashierDto;
 import com.system.cash_control.utils.exceptions.BusinessRuleException;
+import com.system.cash_control.utils.pagination.PagedResult;
+import com.system.cash_control.utils.pagination.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,5 +66,13 @@ public class CashierController {
         Cashier cashier = gateway.findById(id);
 
         gateway.delete(cashier);
+    }
+
+    public PagedResult<CashierDto> findAll(Pagination page, Integer cashierId, String description) {
+        Pageable pageable = PageRequest.of(page.getPage(), page.getPageSize(), Sort.by("id").ascending());
+
+        Page<Cashier> result = gateway.findAll(cashierId, description, pageable);
+
+        return presenter.convert(result);
     }
 }
