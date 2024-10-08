@@ -2,18 +2,33 @@ import React, {useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 import {FaEdit, FaTrashAlt} from "react-icons/fa";
 import "../styles/CashierGrid.css";
-import { MdFirstPage } from "react-icons/md";
-import { MdLastPage } from "react-icons/md";
+import {MdFirstPage, MdLastPage} from "react-icons/md";
 
 function CashierGrid() {
     const [cashier, setCashier] = React.useState([]);
-    const [page, setPage] = React.useState(0);
+    const [page, setPage] = React.useState({
+        'page': 0,
+        'pageSize': 10,
+        'totalPages': 0
+    });
     const navigate = useNavigate();
     const [idQuery, setIdQuery] = React.useState('');
     const [descriptionQuery, setDescriptionQuery] = React.useState('');
 
     const getCashiers = () => {
-        fetch('/api/cashier', {
+        let path = `/api/cashier?initialPage=${page.page ? page.page : 0}&pageSize=2`;
+
+        if (idQuery.length > 0 && descriptionQuery.length > 0) {
+            path += `&cashierId=${idQuery}&description=${descriptionQuery}`;
+        } else if (idQuery.length > 0) {
+            path += `&cashierId=${idQuery}`;
+        } else if (descriptionQuery.length > 0) {
+            path += `&description=${descriptionQuery}`;
+        }
+
+        console.log(path);
+
+        fetch(path, {
             headers: {
                 Accept: "application/json",
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -36,13 +51,23 @@ function CashierGrid() {
         getCashiers();
     }, []);
 
+    useEffect(() => {
+        const delay = setTimeout(() => {
+            getCashiers();
+        }, 500);
+
+        return () => clearTimeout(delay);
+
+    }, [idQuery, descriptionQuery, page]);
+
+
     const createBodyTable = cashier.map(item => {
         return (
             <tr key={item.id}>
                 <td> {item.id}</td>
                 <td> {item.description}</td>
                 <td> R$ {item.balance.toFixed(2)}</td>
-                <td>
+                <td width={10}>
                     <div className="buttonTable">
                         <div>
                             <button><FaEdit size={15}/></button>
@@ -62,6 +87,26 @@ function CashierGrid() {
 
     function updateDescriptionQuery(event) {
         setDescriptionQuery(event.target.value);
+    }
+
+    function backPage() {
+        /*if (page.page > 0 && page.page <= page.totalPages) {
+            setPage({
+                'page': page.page - 1,
+                'pageSize': 10,
+                'totalPages': page.totalPages
+            });
+        }*/
+    }
+
+    function nextPage() {
+        /*if (page.page <= page.totalPages) {
+            setPage({
+                'page': page.page + 1,
+                'pageSize': 10,
+                'totalPages': page.totalPages
+            });
+        }*/
     }
 
     return (
@@ -93,10 +138,12 @@ function CashierGrid() {
                     <tbody>{createBodyTable}</tbody>
                 </table>
             </div>
-            <div className="CashierGridPagination">
-                <div className="buttonPage"><MdFirstPage size={30} /></div>
-                <div className="buttonPage"><MdLastPage size={30} /></div>
-            </div>
+            {page.page + 1 !== page.totalPages &&
+                <div className="CashierGridPagination">
+                    <div className="buttonPage" onClick={backPage}><MdFirstPage size={30}/></div>
+                    <div className="buttonPage" onClick={nextPage}><MdLastPage size={30}/></div>
+                </div>
+            }
         </div>
     );
 }

@@ -72,17 +72,29 @@
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    cursor: pointer;
     margin: 10px;
+}
+
+.buttonPage:hover {
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 .buttonTable {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    cursor: pointer;
 }
 
 .buttonTable button {
+    padding: 4px;
+    margin: 3px;
+    border: none;
+    width: 35px;
+    border-radius: 5px;
+}
 
+.buttonTable button:hover {
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
