@@ -6,17 +6,14 @@ import {MdFirstPage, MdLastPage} from "react-icons/md";
 
 function CashierGrid() {
     const [cashier, setCashier] = React.useState([]);
-    const [page, setPage] = React.useState({
-        'page': 0,
-        'pageSize': 10,
-        'totalPages': 0
-    });
+    const [currentPage, setCurrentPage] = React.useState(0);
+    const [totalPage, setTotalPage] = React.useState(0);
     const navigate = useNavigate();
     const [idQuery, setIdQuery] = React.useState('');
     const [descriptionQuery, setDescriptionQuery] = React.useState('');
 
     const getCashiers = () => {
-        let path = `/api/cashier?initialPage=${page.page ? page.page : 0}&pageSize=2`;
+        let path = `/api/cashier?initialPage=${currentPage ? currentPage : 0}`;
 
         if (idQuery.length > 0 && descriptionQuery.length > 0) {
             path += `&cashierId=${idQuery}&description=${descriptionQuery}`;
@@ -25,8 +22,6 @@ function CashierGrid() {
         } else if (descriptionQuery.length > 0) {
             path += `&description=${descriptionQuery}`;
         }
-
-        console.log(path);
 
         fetch(path, {
             headers: {
@@ -43,7 +38,9 @@ function CashierGrid() {
             }
         }).then(data => {
             setCashier(data ? data.data : []);
-            setPage(data ? data.pagination : {});
+            const page = data ? data.pagination : {'page': 0, 'totalPages': 0};
+            setCurrentPage(page.page);
+            setTotalPage(page.totalPages);
         });
     }
 
@@ -58,8 +55,7 @@ function CashierGrid() {
 
         return () => clearTimeout(delay);
 
-    }, [idQuery, descriptionQuery, page]);
-
+    }, [idQuery, descriptionQuery, currentPage]);
 
     const createBodyTable = cashier.map(item => {
         return (
@@ -90,23 +86,15 @@ function CashierGrid() {
     }
 
     function backPage() {
-        /*if (page.page > 0 && page.page <= page.totalPages) {
-            setPage({
-                'page': page.page - 1,
-                'pageSize': 10,
-                'totalPages': page.totalPages
-            });
-        }*/
+        if (currentPage > 0) {
+            setCurrentPage(currentPage - 1);
+        }
     }
 
     function nextPage() {
-        /*if (page.page <= page.totalPages) {
-            setPage({
-                'page': page.page + 1,
-                'pageSize': 10,
-                'totalPages': page.totalPages
-            });
-        }*/
+        if (currentPage + 1 < totalPage) {
+            setCurrentPage(currentPage + 1);
+        }
     }
 
     return (
@@ -138,12 +126,10 @@ function CashierGrid() {
                     <tbody>{createBodyTable}</tbody>
                 </table>
             </div>
-            {page.page + 1 !== page.totalPages &&
-                <div className="CashierGridPagination">
-                    <div className="buttonPage" onClick={backPage}><MdFirstPage size={30}/></div>
-                    <div className="buttonPage" onClick={nextPage}><MdLastPage size={30}/></div>
-                </div>
-            }
+            <div className="CashierGridPagination">
+                <div className="buttonPage" onClick={backPage}><MdFirstPage size={30}/></div>
+                <div className="buttonPage" onClick={nextPage}><MdLastPage size={30}/></div>
+            </div>
         </div>
     );
 }
