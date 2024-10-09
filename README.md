@@ -11,6 +11,22 @@ verifique o README.md de cada projeto.
 - Spring Data
 - PostgreSQL
 - Docker
+- React
+
+## Funcionamento
+
+O front foi desenvolvido para melhor apresentação do backend. É possível fazer login, cadastrar usuário, realizar
+operações com caixa e cadastrar movimentação. As funções referentes a deletar e editar movimentação, não foi
+implementada
+via frontend, porém os métodos existem e por via de facilidade podem ser visualizados/testados via Swagger.
+
+### As telas
+
+Abaixo é possível ver o funcionamento de forma geral.
+
+<p align="center">
+  <img src="./uso_sistem_controle_caixa.gif" />
+</p>
 
 ## Como executar
 
@@ -80,3 +96,23 @@ Considerando tudo configurado como esperado, deve ser possível acessar os endpo
 
 * [Swagger](http://localhost:8080/doc/api.html)
 * [Documentação](http://localhost:8080/documentation)
+
+4. Considerando tudo cert com a execução dos containers, agora subiremos o front. Entre no diretório do projeto e
+   execute os dois comandos abaixo na ordem apresentada.
+
+```
+npm install
+```
+
+```
+npm start
+```
+
+## O que é possível acessar
+
+Após a configuração será possível acessas as documentações sobre os endpoints, elas precisam apenas do backend, e também
+o frontend da aplicação, caso esteja executando o projeto por completo. Segue os links.
+
+* [Swagger](http://localhost:8080/doc/api.html)
+* [Documentação](http://localhost:8080/documentation)
+* [Frontend](http://localhost:3000)

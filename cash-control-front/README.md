@@ -5,8 +5,8 @@ Um sistema para contrle de caixa com autenticação.
 ## Funcionamento
 
 O front foi desenvolvido para melhor apresentação do backend. É possível fazer login, cadastrar usuário, realizar
-operações com caixa e cadastrar movimentação. As funções referentes a deletar e editar movimentação não foi implementada
-via frontend, porém métodos existem.
+operações com caixa e cadastrar movimentação. As funções referentes a deletar e editar movimentação, não foi implementada
+via frontend, porém os métodos existem e por via de facilidade podem ser visualizados/testados via Swagger.
 
 ## As telas
 
@@ -27,3 +27,13 @@ Note que no .env é informado o endereço do api. Está pode está executando ta
 prerência, que não haverá mudança.
 
     No momento este não foi adicionado ao compose. Ainda.
+
+Por fim, considerando que o backend está pronto para receber as requisições, execute os dois comandos abaixo, na ordem apresentada, no diretório deste projeto.
+
+```
+npm install
+```
+
+```
+npm start
+```
