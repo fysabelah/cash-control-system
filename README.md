@@ -25,7 +25,7 @@ via frontend, porém os métodos existem e por via de facilidade podem ser visua
 Abaixo é possível ver o funcionamento de forma geral.
 
 <p align="center">
-  <img src="./uso_sistem_controle_caixa.gif" />
+  <img src="./cash-control-front/uso_sistem_controle_caixa.gif" />
 </p>
 
 ## Como executar
