@@ -1,0 +1,18 @@
+.PageWithTable {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-start;
+    height: 100vh;
+    align-items: stretch;
+}
+
+.PageTableHeader {
+    color: white;
+    height: 20vh;
+}
+
+.Table {
+    padding: 30px;
+    height: max-content;
+}

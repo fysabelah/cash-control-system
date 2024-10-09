@@ -3,6 +3,8 @@ package com.system.cash_control.interfaceadpaters.gateway;
 import com.system.cash_control.entities.Cashier;
 import com.system.cash_control.frameworks.db.CashierRepository;
 import com.system.cash_control.utils.MessageUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -43,5 +45,21 @@ public class CashierGateway {
 
     public Cashier update(Cashier cashier) {
         return repository.save(cashier);
+    }
+
+    public Page<Cashier> findAll(Integer cashierId, String description, Pageable pageable) {
+        if (cashierId != null && description != null && !description.isBlank()) {
+            return repository.findAllByIdAndDescription(cashierId, description.toUpperCase(), pageable);
+        }
+
+        if (cashierId != null) {
+            return repository.findById(cashierId, pageable);
+        }
+
+        if (description != null && !description.isBlank()) {
+            return repository.findByDescriptionLike(description.toUpperCase(), pageable);
+        }
+
+        return repository.findByDeleted(false, pageable);
     }
 }

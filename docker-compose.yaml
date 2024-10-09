@@ -49,6 +49,8 @@ services:
       USERNAME_SYSTEM: ${USERNAME_SYSTEM}
       PASSWORD_SYSTEM: ${PASSWORD_SYSTEM}
       JWT_DECODE: ${JWT_DECODE}
+    depends_on:
+      - postgres
 
 networks:
   cash-control-system:
