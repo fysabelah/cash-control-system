@@ -1,0 +1,9 @@
+{
+  "short_name": "Controle de Caixa",
+  "name": "Sistema de Controle de Caixa",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

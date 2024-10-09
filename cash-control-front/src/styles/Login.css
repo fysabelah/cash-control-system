@@ -1,0 +1,27 @@
+.Login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: inherit;
+}
+
+.ButtonDiv {
+    margin-top: 15px;
+    width: 50%;
+}
+
+.ButtonDiv button {
+    width: 100%;
+    padding: 10px;
+    background-color: #133B56;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.ButtonDiv button:hover {
+    background-color: #0056b3;
+}

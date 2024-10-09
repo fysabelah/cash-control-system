@@ -1,0 +1,12 @@
+.Home {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.Home p:hover {
+    cursor: pointer;
+    color: #0056b3;
+}
