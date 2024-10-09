@@ -116,6 +116,8 @@ function CashierGeneralReport(
                     position: "top-right",
                     autoClose: timeRemoveNotification
                 });
+
+                window.location.reload();
             }
 
         } catch (error) {
