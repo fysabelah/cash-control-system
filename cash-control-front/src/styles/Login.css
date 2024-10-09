@@ -5,29 +5,12 @@
     height: inherit;
 }
 
-.LoginForm {
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    align-items: center;
-}
-
-.LoginInputs {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
 .ButtonDiv {
     margin-top: 15px;
     width: 50%;
 }
 
-.LoginForm button {
+.ButtonDiv button {
     width: 100%;
     padding: 10px;
     background-color: #133B56;
@@ -39,17 +22,6 @@
     transition: background-color 0.3s ease;
 }
 
-.LoginForm button:hover {
+.ButtonDiv button:hover {
     background-color: #0056b3;
-}
-
-.LoginForm input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    box-sizing: border-box;
-    outline: none;
-    transition: border-color 0.3s ease;
 }

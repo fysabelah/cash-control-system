@@ -5,7 +5,6 @@ import com.system.cash_control.frameworks.db.CashierRepository;
 import com.system.cash_control.utils.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -61,6 +60,6 @@ public class CashierGateway {
             return repository.findByDescriptionLike(description.toUpperCase(), pageable);
         }
 
-        return repository.findAll(pageable);
+        return repository.findByDeleted(false, pageable);
     }
 }

@@ -1,0 +1,48 @@
+.Modal {
+    position: fixed;
+    z-index: 1;
+    border-radius: 3px;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.ModalConfirmation__body {
+    width: 30%;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 8px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.ModalConfirmation__button {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+}
+
+.ModalConfirmation__button button {
+    margin: 0 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.ModalConfirmation__button .buttonConfirmationGreen {
+    background-color: darkolivegreen;
+    color: white;
+}
+
+.ModalConfirmation__button button:hover {
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}

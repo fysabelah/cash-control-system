@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/Login.css";
 import {useNavigate} from 'react-router-dom';
+import "../styles/Generic.css"
 
 
 export default function Login({buttonName}) {
@@ -78,8 +79,8 @@ export default function Login({buttonName}) {
 
     return (
         <div className="Login">
-            <form className="LoginForm">
-                <div className="LoginInputs">
+            <form className="Form">
+                <div className="FormItem">
                     <div>
                         <p>Usuário</p>
                     </div>
@@ -87,7 +88,7 @@ export default function Login({buttonName}) {
                         <input type={"text"} name="usuario" onChange={updateUsername}/>
                     </div>
                 </div>
-                <div className="LoginInputs">
+                <div className="FormItem">
                     <div>
                         <p>Senha</p>
                     </div>
