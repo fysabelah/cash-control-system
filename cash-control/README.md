@@ -7,15 +7,11 @@ Um sistema de controle de caixa com controle de autenticação e relatório de m
 * Este projeto faz uso de armazenamento das chaves responsáveis pela geração do token JWT. Está pode não ser a melhor
   abordagem, inclusive devido ao ambiente onde este poderia está executando. Talvez seria mais interessante salvar em
   algum provedor de nuvem, por exemplo, e recuperar as chaves.
-* A consulta que gerar basicamente um relatório de movimentações, dependendo da quantidade, pode se tornar bastante
+* A consulta que gera basicamente um relatório de movimentações, dependendo da quantidade, pode se tornar bastante
   onerosa, o que torna interessante setar um range máximo para consulta.
-* Justamente pelo ponto anterior comentando, durante uma consulta para algo similiar a um relatório de movimentação,
-  está sendo recuperado todas informações de uma única vez, dependo da quantidde isto poderia ter um retorno bem
-  demorado, inclusive levando a timeout. Talvez uma abordagem mais interessante seria particionar a recuperação das
-  informações conforme a tela, considerando a utilização de front, está sendo rederizada.
-* As decisões foram tomadas considerando um escopo menor, porém neste consulta de relatório, mesmo assim, foi setado
-  limite para tamanho da página. Entranto, a consulta que varifica a quantidade total não é paginada, o que poderia
-  resultar em problemas.
+  * As decisões foram tomadas considerando um escopo menor, porém neste consulta de relatório, mesmo assim, foi setado
+    limite para tamanho da página. Entranto, a consulta que varifica a quantidade total não é paginada, o que poderia
+    resultar em problemas.
 
 ## Tecnologias
 

@@ -33,7 +33,8 @@ public class UserWeb {
 
     @GetMapping(value = "/token")
     @Operation(description = "Gerar token JWT")
-    public ResponseEntity<LoginDto> getToken(@RequestParam String username, @Parameter(description = "É esperado em BASIC64") @RequestParam String password) throws BusinessRuleException {
+    public ResponseEntity<LoginDto> getToken(@RequestParam String username,
+                                             @Parameter(description = "É esperado em Base64") @RequestParam String password) throws BusinessRuleException {
         return ResponseEntity.ok(controller.getToken(username, password));
     }
 }

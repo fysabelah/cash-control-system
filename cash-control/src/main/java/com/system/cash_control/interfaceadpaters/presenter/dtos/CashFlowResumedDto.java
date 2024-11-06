@@ -9,11 +9,11 @@ import java.util.Map;
 @Getter
 public class CashFlowResumedDto {
 
-    private BigDecimal cashInflow;
+    private final BigDecimal cashInflow;
 
-    private BigDecimal cashOutflow;
+    private final BigDecimal cashOutflow;
 
-    private BigDecimal balanceGeneral;
+    private final BigDecimal balanceGeneral;
 
     public CashFlowResumedDto(Map<CashFlowType, BigDecimal> report) {
         this.cashInflow = report.get(CashFlowType.E);

@@ -2,8 +2,9 @@ package com.system.cash_control.frameworks.web;
 
 import com.system.cash_control.interfaceadpaters.controllers.CashFlowController;
 import com.system.cash_control.interfaceadpaters.presenter.dtos.CashFlowDto;
-import com.system.cash_control.interfaceadpaters.presenter.dtos.CashFlowReport;
+import com.system.cash_control.interfaceadpaters.presenter.dtos.CashFlowResumedDto;
 import com.system.cash_control.utils.exceptions.BusinessRuleException;
+import com.system.cash_control.utils.pagination.PagedResult;
 import com.system.cash_control.utils.pagination.Pagination;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -49,16 +50,24 @@ public class CashFlowWeb {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping
+    @GetMapping(value = "/resumed/{id}")
+    @Operation(description = "Buscar movimentações resumidas")
+    public ResponseEntity<CashFlowResumedDto> findAll(@Parameter(description = "Identificador do caixa") @PathVariable Integer id,
+                                                      @Parameter(description = "Mês") @RequestParam(required = false) Month month,
+                                                      @Parameter(description = "Ano") @RequestParam(required = false) @Pattern(regexp = "[0-9]{4}") String year) {
+        return ResponseEntity.ok(controller.findGeneralValues(id, month, year));
+    }
+
+    @GetMapping(value = "/{id}")
     @Operation(description = "Buscar movimentações")
-    public ResponseEntity<CashFlowReport> findAll(@Parameter(description = "Tamanho da página") @RequestParam(required = false) Integer pageSize,
-                                                    @Parameter(description = "Página") @RequestParam(required = false) Integer initialPage,
-                                                    @Parameter(description = "Identificador do caixa") @RequestParam Integer cashierId,
-                                                    @Parameter(description = "Mês") @RequestParam(required = false) Month month,
-                                                    @Parameter(description = "Ano") @RequestParam(required = false) @Pattern(regexp = "[0-9]{4}") String year
+    public ResponseEntity<PagedResult<CashFlowDto>> findAll(@Parameter(description = "Tamanho da página") @RequestParam(required = false) Integer pageSize,
+                                                            @Parameter(description = "Página") @RequestParam(required = false) Integer initialPage,
+                                                            @Parameter(description = "Identificador do caixa") @PathVariable Integer id,
+                                                            @Parameter(description = "Mês") @RequestParam(required = false) Month month,
+                                                            @Parameter(description = "Ano") @RequestParam(required = false) @Pattern(regexp = "[0-9]{4}") String year
     ) {
         Pagination page = new Pagination(initialPage, pageSize);
 
-        return ResponseEntity.ok(controller.findAll(page, cashierId, month, year));
+        return ResponseEntity.ok(controller.findAll(page, id, month, year));
     }
 }

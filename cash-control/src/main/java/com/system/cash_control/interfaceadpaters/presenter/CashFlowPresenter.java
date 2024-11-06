@@ -3,7 +3,6 @@ package com.system.cash_control.interfaceadpaters.presenter;
 import com.system.cash_control.entities.CashFlow;
 import com.system.cash_control.entities.Cashier;
 import com.system.cash_control.interfaceadpaters.presenter.dtos.CashFlowDto;
-import com.system.cash_control.interfaceadpaters.presenter.dtos.CashFlowReport;
 import com.system.cash_control.interfaceadpaters.presenter.dtos.CashFlowResumedDto;
 import com.system.cash_control.utils.enums.CashFlowType;
 import com.system.cash_control.utils.pagination.PagedResult;
@@ -45,20 +44,16 @@ public class CashFlowPresenter {
         );
     }
 
-    public CashFlowReport convert(Map<CashFlowType, BigDecimal> cashFlowGeneral, Map<CashFlowType, BigDecimal> cashFlow, Page<CashFlow> result) {
-        CashFlowReport report = CashFlowReport.builder()
-                .cashFlowWithGeneral(new CashFlowResumedDto(cashFlowGeneral))
-                .cashFlowWithFilters(new CashFlowResumedDto(cashFlow))
-                .cashFlow(new PagedResult<>())
-                .build();
-
-        report.getCashFlow().setPagination(new Pagination(result.getNumber(), result.getSize(), result.getTotalPages()));
+    public PagedResult<CashFlowDto> convert(Page<CashFlow> result) {
+        Pagination pagination = new Pagination(result.getNumber(), result.getSize(), result.getTotalPages());
 
         List<CashFlowDto> data = result.get().map(this::convert)
                 .toList();
 
-        report.getCashFlow().setData(data);
+        return new PagedResult<>(pagination, data);
+    }
 
-        return report;
+    public CashFlowResumedDto convert(Map<CashFlowType, BigDecimal> values) {
+        return new CashFlowResumedDto(values);
     }
 }

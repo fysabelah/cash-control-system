@@ -48,35 +48,6 @@ public class CashFlowGateway {
         repository.deleteById(id);
     }
 
-    private BigDecimal calculateCashFlowByType(Integer cashierId, CashFlowType cashFlowType) {
-        return repository.calculateCashFlowByType(cashierId, cashFlowType)
-                .orElse(BigDecimal.ZERO);
-    }
-
-    public Map<CashFlowType, BigDecimal> getGeneralCashFlowValues(Integer cashierId) {
-        Map<CashFlowType, BigDecimal> cashFlow = HashMap.newHashMap(2);
-
-        BigDecimal generalCashIn = calculateCashFlowByType(cashierId, CashFlowType.E);
-        BigDecimal generalCashOut = calculateCashFlowByType(cashierId, CashFlowType.S);
-
-        cashFlow.put(CashFlowType.E, generalCashIn);
-        cashFlow.put(CashFlowType.S, generalCashOut);
-
-        return cashFlow;
-    }
-
-    public Map<CashFlowType, BigDecimal> getCashFlowValues(Integer cashierId, Month month, String year) {
-        Map<CashFlowType, BigDecimal> cashFlow = HashMap.newHashMap(2);
-
-        BigDecimal generalCashIn = repository.getCashFlowValues(cashierId, month, year, CashFlowType.E);
-        BigDecimal generalCashOut = repository.getCashFlowValues(cashierId, month, year, CashFlowType.S);
-
-        cashFlow.put(CashFlowType.E, generalCashIn);
-        cashFlow.put(CashFlowType.S, generalCashOut);
-
-        return cashFlow;
-    }
-
     public Page<CashFlow> findAll(Pagination page, Integer cashierId, Month month, String year) {
         Pageable pageable = PageRequest.of(page.getPage(), page.getPageSize());
 
@@ -88,5 +59,17 @@ public class CashFlowGateway {
                 .orElseThrow(() ->
                         new NoSuchElementException(MessageUtil.getMessage("CASH_FLOW_COMBINED_WITH_CASHIER_NOT_FOUND",
                                 cashFlowId.toString(), cashierId.toString())));
+    }
+
+    public Map<CashFlowType, BigDecimal> getResumedCashFlowValues(Integer cashierId, Month month, String year) {
+        Map<CashFlowType, BigDecimal> cashFlow = HashMap.newHashMap(2);
+
+        BigDecimal generalCashIn = repository.getCashFlowValues(cashierId, month, year, CashFlowType.E);
+        BigDecimal generalCashOut = repository.getCashFlowValues(cashierId, month, year, CashFlowType.S);
+
+        cashFlow.put(CashFlowType.E, generalCashIn);
+        cashFlow.put(CashFlowType.S, generalCashOut);
+
+        return cashFlow;
     }
 }

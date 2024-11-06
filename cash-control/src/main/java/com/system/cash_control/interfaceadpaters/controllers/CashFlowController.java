@@ -6,9 +6,10 @@ import com.system.cash_control.interfaceadpaters.gateway.CashFlowGateway;
 import com.system.cash_control.interfaceadpaters.gateway.CashierGateway;
 import com.system.cash_control.interfaceadpaters.presenter.CashFlowPresenter;
 import com.system.cash_control.interfaceadpaters.presenter.dtos.CashFlowDto;
-import com.system.cash_control.interfaceadpaters.presenter.dtos.CashFlowReport;
+import com.system.cash_control.interfaceadpaters.presenter.dtos.CashFlowResumedDto;
 import com.system.cash_control.utils.enums.CashFlowType;
 import com.system.cash_control.utils.exceptions.BusinessRuleException;
+import com.system.cash_control.utils.pagination.PagedResult;
 import com.system.cash_control.utils.pagination.Pagination;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -95,13 +96,15 @@ public class CashFlowController {
         gateway.delete(id);
     }
 
-    public CashFlowReport findAll(Pagination page, Integer cashierId, Month month, String year) {
-        Map<CashFlowType, BigDecimal> cashFlowGeneral = gateway.getGeneralCashFlowValues(cashierId);
-
-        Map<CashFlowType, BigDecimal> cashFlow = gateway.getCashFlowValues(cashierId, month, year);
-
+    public PagedResult<CashFlowDto> findAll(Pagination page, Integer cashierId, Month month, String year) {
         Page<CashFlow> result = gateway.findAll(page, cashierId, month, year);
 
-        return presenter.convert(cashFlowGeneral, cashFlow, result);
+        return presenter.convert(result);
+    }
+
+    public CashFlowResumedDto findGeneralValues(Integer cashierId, Month month, String year) {
+        Map<CashFlowType, BigDecimal> values = gateway.getResumedCashFlowValues(cashierId, month, year);
+
+        return presenter.convert(values);
     }
 }
