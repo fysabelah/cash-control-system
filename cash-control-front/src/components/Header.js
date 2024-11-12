@@ -2,18 +2,24 @@ import React from 'react';
 import "../styles/Header.css";
 import {useNavigate} from "react-router-dom";
 
-function Header() {
-
+const useHeader = () => {
     const navigate = useNavigate();
 
-    function logout() {
-        localStorage.removeItem("token");
-        navigate('/');
-    }
-
-    function goToHome() {
+    const goToHome = () => {
         navigate('/caixa');
     }
+
+    const logout = () => {
+        localStorage.removeItem("token");
+        navigate('/login');
+    }
+
+    return {goToHome, logout};
+}
+
+function Header() {
+
+    const {goToHome, logout} = useHeader();
 
     return (
         <header className="Header">
