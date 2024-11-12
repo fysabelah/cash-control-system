@@ -41,7 +41,7 @@ function CashierGrid() {
         });
 
         if (response.status === 401 || response.status === 403) {
-            return navigate('/');
+            return navigate('/login');
         }
 
         const data = await response.json();
@@ -128,7 +128,7 @@ function CashierGrid() {
                 });
 
                 if (response.status === 401 || response.status === 403) {
-                    return navigate("/");
+                    return navigate("/login");
                 }
 
                 if (!response.ok) {
@@ -217,7 +217,7 @@ function CashierGrid() {
             });
 
             if (response.status === 401 || response.status === 403) {
-                return navigate("/");
+                return navigate("/login");
             }
 
             if (!response.ok) {

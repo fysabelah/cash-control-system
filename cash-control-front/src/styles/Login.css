@@ -1,8 +1,14 @@
 .Login {
+    height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
-    height: inherit;
+    align-items: stretch;
+}
+
+.Login .LoginOptionButton:hover {
+    cursor: pointer;
+    color: #0056b3;
 }
 
 .ButtonDiv {
