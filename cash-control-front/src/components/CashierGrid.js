@@ -6,31 +6,43 @@ import {MdFirstPage, MdLastPage} from "react-icons/md";
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "../styles/ModalConfirmation.css";
+import ModalDelete from "./generic_components/ModalDelete";
 
 function CashierGrid() {
     const [cashier, setCashier] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
     const navigate = useNavigate();
-    const [idQuery, setIdQuery] = useState('');
-    const [descriptionQuery, setDescriptionQuery] = useState('');
     const [showModalDelete, setShowModalDelete] = useState(false);
-    const [cashierIdToDelete, setCashierIdToDelete] = React.useState('');
+    const [cashierIdToDelete, setCashierIdToDelete] = React.useState(null);
     const genericErrorMessage = 'Ocorreu um erro!';
     const timeRemoveNotification = 10000;
     const [showModalCreate, setShowModalCreate] = React.useState(false);
     const [cashierCreateDescription, setCashierCreateDescription] = React.useState('');
     const [cashierCreateValue, setCashierCreateValue] = React.useState(0);
+    const [dataQuery, setDataQuery] = React.useState({
+        id: "",
+        description: ""
+    });
+
+    const handleChangeQueryParams = (event) => {
+        const {name, value} = event.target;
+
+        setDataQuery((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    }
 
     const getCashiers = async () => {
         let path = `/api/cashier?initialPage=${currentPage ? currentPage : 0}`;
 
-        if (idQuery.length > 0 && descriptionQuery.length > 0) {
-            path += `&cashierId=${idQuery}&description=${descriptionQuery}`;
-        } else if (idQuery.length > 0) {
-            path += `&cashierId=${idQuery}`;
-        } else if (descriptionQuery.length > 0) {
-            path += `&description=${descriptionQuery}`;
+        if (dataQuery.id.length > 0 && dataQuery.description.length > 0) {
+            path += `&cashierId=${dataQuery.id}&description=${dataQuery.description}`;
+        } else if (dataQuery.id.length > 0) {
+            path += `&cashierId=${dataQuery.id}`;
+        } else if (dataQuery.description.length > 0) {
+            path += `&description=${dataQuery.description}`;
         }
 
         const response = await fetch(path, {
@@ -69,9 +81,9 @@ function CashierGrid() {
 
         return () => clearTimeout(delay);
 
-    }, [idQuery, descriptionQuery, currentPage]);
+    }, [dataQuery, currentPage]);
 
-    function deleteCashier(cashierId) {
+    function openModalDelete(cashierId) {
         setShowModalDelete(true);
         setCashierIdToDelete(cashierId);
     }
@@ -90,7 +102,7 @@ function CashierGrid() {
                             }}><FaEdit size={15}/></button>
                         </div>
                         <div>
-                            <button onClick={() => deleteCashier(item.id)} name="Excluir"><FaTrashAlt size={15}/>
+                            <button onClick={() => openModalDelete(item.id)} name="Excluir"><FaTrashAlt size={15}/>
                             </button>
                         </div>
                     </div>
@@ -184,14 +196,6 @@ function CashierGrid() {
         </div>
     );
 
-    function updateIdQuery(event) {
-        setIdQuery(event.target.value);
-    }
-
-    function updateDescriptionQuery(event) {
-        setDescriptionQuery(event.target.value);
-    }
-
     function backPage() {
         if (currentPage > 0) {
             setCurrentPage(currentPage - 1);
@@ -204,11 +208,18 @@ function CashierGrid() {
         }
     }
 
-    const executeDeleteCashier = async (id) => {
+    const handleModalDeleteState = () => {
+        setShowModalDelete(false);
+    }
+
+
+    const executeDeleteCashier = async () => {
+        if (cashierIdToDelete == null) return;
+
         setShowModalDelete(false);
 
         try {
-            const response = await fetch(`/api/cashier/${id}`, {
+            const response = await fetch(`/api/cashier/${cashierIdToDelete}`, {
                 method: 'DELETE',
                 headers: {
                     Accept: 'application/json',
@@ -239,26 +250,6 @@ function CashierGrid() {
         }
     };
 
-    const confirmDeleteCashier = () => (
-        <div className="Modal">
-            <div className="ModalConfirmation__body">
-                <div>
-                    <h3>Deseja deletar o caixa {cashierIdToDelete}?</h3>
-                </div>
-                <div className="ModalConfirmation__button">
-                    <div>
-                        <button onClick={() => setShowModalDelete(false)}>Cancelar</button>
-                    </div>
-                    <div>
-                        <button className="buttonConfirmationGreen"
-                                onClick={() => executeDeleteCashier(cashierIdToDelete)}>Confirmar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-
     return (
         <div className="CashierGrid">
             <div className="CashierGridTitle">
@@ -266,10 +257,18 @@ function CashierGrid() {
             </div>
             <div className="CashierFilters">
                 <div>
-                    <input type="number" placeholder="Identificador" onChange={updateIdQuery}/>
+                    <input type="number"
+                           placeholder="Identificador"
+                           name="id"
+                           value={dataQuery.id}
+                           onChange={handleChangeQueryParams}/>
                 </div>
                 <div>
-                    <input type="text" placeholder="Descrição" onChange={updateDescriptionQuery}/>
+                    <input type="text"
+                           placeholder="Descrição"
+                           name="description"
+                           value={dataQuery.description}
+                           onChange={handleChangeQueryParams}/>
                 </div>
                 <div>
                     <button onClick={() => setShowModalCreate(true)}>Cadastrar</button>
@@ -293,7 +292,11 @@ function CashierGrid() {
                 <div className="buttonPage" onClick={nextPage}><MdLastPage size={30}/></div>
             </div>
             <ToastContainer/>
-            {showModalDelete && confirmDeleteCashier()}
+            {showModalDelete &&
+                <ModalDelete description={`o caixa ${cashierIdToDelete}`}
+                             onConfirm={executeDeleteCashier}
+                             onCancel={handleModalDeleteState}
+                />}
             {showModalCreate && createCashierModal()}
         </div>
 
