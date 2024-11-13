@@ -7,6 +7,7 @@ import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "../styles/ModalConfirmation.css";
 import ModalDelete from "./generic_components/ModalDelete";
+import ModalCreateCashier from "./cashier_items/ModalCreateCashier";
 
 function CashierGrid() {
     const [cashier, setCashier] = useState([]);
@@ -18,8 +19,6 @@ function CashierGrid() {
     const genericErrorMessage = 'Ocorreu um erro!';
     const timeRemoveNotification = 10000;
     const [showModalCreate, setShowModalCreate] = React.useState(false);
-    const [cashierCreateDescription, setCashierCreateDescription] = React.useState('');
-    const [cashierCreateValue, setCashierCreateValue] = React.useState(0);
     const [dataQuery, setDataQuery] = React.useState({
         id: "",
         description: ""
@@ -72,7 +71,7 @@ function CashierGrid() {
 
     useEffect(() => {
         getCashiers();
-    }, []);
+    });
 
     useEffect(() => {
         const delay = setTimeout(() => {
@@ -111,90 +110,45 @@ function CashierGrid() {
         );
     });
 
-    function updateCashierCreateName(event) {
-        setCashierCreateDescription(event.target.value);
-    }
+    const insertCashier = async (formData) => {
+        setShowModalCreate(false);
 
-    function updateCashierCreateDescription(event) {
-        setCashierCreateValue(event.target.value);
-    }
+        try {
+            const response = await fetch(`/api/cashier`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    description: formData.description,
+                    balance: formData.balance,
+                })
+            });
 
-    const insertCashier = async () => {
-        if (cashierCreateValue < 0 || cashierCreateDescription.length === 0) {
-            toast.warn('Todos os campos são obrigatórios!', {position: "top-right", autoClose: timeRemoveNotification});
-        } else {
-            setShowModalCreate(false);
+            if (response.status === 401 || response.status === 403) {
+                return navigate("/login");
+            }
 
-            try {
-                const response = await fetch(`/api/cashier`, {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        description: cashierCreateDescription,
-                        balance: cashierCreateValue,
-                    })
+            if (!response.ok) {
+                const data = await response.json();
+
+                const message = data && data.message ? data.message : genericErrorMessage;
+
+                toast.error(message, {position: "top-right", autoClose: timeRemoveNotification});
+            } else {
+                toast.success('Caixa cadastrado com sucesso!', {
+                    position: "top-right",
+                    autoClose: timeRemoveNotification
                 });
 
-                if (response.status === 401 || response.status === 403) {
-                    return navigate("/login");
-                }
-
-                if (!response.ok) {
-                    const data = await response.json();
-
-                    const message = data && data.message ? data.message : genericErrorMessage;
-
-                    toast.error(message, {position: "top-right", autoClose: timeRemoveNotification});
-                } else {
-                    toast.success('Caixa cadastrado com sucesso!', {
-                        position: "top-right",
-                        autoClose: timeRemoveNotification
-                    });
-                }
-
-                getCashiers();
-            } catch (error) {
-                toast.error(genericErrorMessage, {position: "top-right", autoClose: timeRemoveNotification});
+                await getCashiers();
             }
+        } catch (error) {
+            toast.error(genericErrorMessage, {position: "top-right", autoClose: timeRemoveNotification});
         }
     };
-
-    const createCashierModal = () => (
-        <div className="Modal">
-            <form className="Form">
-                <div className="FormItem">
-                    <div>
-                        <p>Descrição</p>
-                    </div>
-                    <div>
-                        <input required type={"text"} name="descrição" onChange={updateCashierCreateName}/>
-                    </div>
-                </div>
-                <div className="FormItem">
-                    <div>
-                        <p>Saldo inicial</p>
-                    </div>
-                    <div>
-                        <input required onChange={updateCashierCreateDescription} name="saldo inicial" type="number"
-                               step="0.01"
-                               min="0.01"/>
-                    </div>
-                </div>
-                <div className="FormButtons">
-                    <div>
-                        <button onClick={() => setShowModalCreate(false)}>Cancelar</button>
-                    </div>
-                    <div>
-                        <button onClick={() => insertCashier()} className="Green">Cadastrar</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    );
 
     function backPage() {
         if (currentPage > 0) {
@@ -212,6 +166,9 @@ function CashierGrid() {
         setShowModalDelete(false);
     }
 
+    const handleModalCreateState = () => {
+        setShowModalCreate(false);
+    }
 
     const executeDeleteCashier = async () => {
         if (cashierIdToDelete == null) return;
@@ -242,9 +199,9 @@ function CashierGrid() {
                     position: "top-right",
                     autoClose: timeRemoveNotification
                 });
-            }
 
-            getCashiers();
+                await getCashiers();
+            }
         } catch (error) {
             toast.error(genericErrorMessage, {position: "top-right", autoClose: timeRemoveNotification});
         }
@@ -297,7 +254,11 @@ function CashierGrid() {
                              onConfirm={executeDeleteCashier}
                              onCancel={handleModalDeleteState}
                 />}
-            {showModalCreate && createCashierModal()}
+            {showModalCreate &&
+                <ModalCreateCashier
+                    onCancel={handleModalCreateState}
+                    onConfirm={insertCashier}
+                />}
         </div>
 
     );
