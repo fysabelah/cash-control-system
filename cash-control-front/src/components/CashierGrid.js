@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
-import {FaEdit, FaTrashAlt} from "react-icons/fa";
 import "../styles/CashierGrid.css";
 import {MdFirstPage, MdLastPage} from "react-icons/md";
 import {toast, ToastContainer} from 'react-toastify';
@@ -8,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "../styles/ModalConfirmation.css";
 import ModalDelete from "./generic_components/ModalDelete";
 import ModalCreateCashier from "./cashier_items/ModalCreateCashier";
+import TableCashier from "./cashier_items/TableCashier";
 
 function CashierGrid() {
     const [cashier, setCashier] = useState([]);
@@ -70,10 +70,6 @@ function CashierGrid() {
     }
 
     useEffect(() => {
-        getCashiers();
-    });
-
-    useEffect(() => {
         const delay = setTimeout(() => {
             getCashiers();
         }, 500);
@@ -86,29 +82,6 @@ function CashierGrid() {
         setShowModalDelete(true);
         setCashierIdToDelete(cashierId);
     }
-
-    const createBodyTable = cashier.map(item => {
-        return (
-            <tr key={item.id} style={{padding: "5px"}}>
-                <td> {item.id}</td>
-                <td> {item.description}</td>
-                <td> R$ {item.balance.toFixed(2)}</td>
-                <td width={10}>
-                    <div className="buttonTable">
-                        <div>
-                            <button onClick={() => {
-                                navigate(`/caixa/${item.id}`)
-                            }}><FaEdit size={15}/></button>
-                        </div>
-                        <div>
-                            <button onClick={() => openModalDelete(item.id)} name="Excluir"><FaTrashAlt size={15}/>
-                            </button>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        );
-    });
 
     const insertCashier = async (formData) => {
         setShowModalCreate(false);
@@ -232,17 +205,10 @@ function CashierGrid() {
                 </div>
             </div>
             <div className="CashierTable">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>DESCRIÇÃO</th>
-                        <th>SALDO INICIAL</th>
-                        <th>AÇÕES</th>
-                    </tr>
-                    </thead>
-                    <tbody>{createBodyTable}</tbody>
-                </table>
+                <TableCashier
+                    cashierData={cashier}
+                    onClickDelete={openModalDelete}
+                />
             </div>
             <div className="CashierGridPagination">
                 <div className="buttonPage" onClick={backPage}><MdFirstPage size={30}/></div>
@@ -260,7 +226,6 @@ function CashierGrid() {
                     onConfirm={insertCashier}
                 />}
         </div>
-
     );
 }
 

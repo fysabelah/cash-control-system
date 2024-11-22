@@ -1,5 +1,5 @@
 import React from "react";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 
 export default function ModalCreateCashier({onCancel, onConfirm}) {
     const [formData, setFormData] = React.useState({
@@ -66,7 +66,6 @@ export default function ModalCreateCashier({onCancel, onConfirm}) {
                     </div>
                 </div>
             </form>
-            <ToastContainer/>
         </div>
     );
 }
