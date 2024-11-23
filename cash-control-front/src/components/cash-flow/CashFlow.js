@@ -1,28 +1,28 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import Header from "./Header";
-import CashierGeneralReport from "./CashierGeneralReport";
-import "../styles/FlowCash.css";
+import Header from "../Header";
+import CashFlowReport from "./CashFlowReport";
+import "../../styles/FlowCash.css";
 import {toast} from "react-toastify";
 import {MdFirstPage, MdLastPage} from "react-icons/md";
 
-function FlowCash() {
+function CashFlow() {
     const {id} = useParams();
     const navigate = useNavigate();
-    const [selectedMonth, setSelectedMonth] = React.useState('');
-    const [selectedYear, setSelectedYear] = React.useState('');
+    const [selectedMonth, setSelectedMonth] = useState('');
+    const [selectedYear, setSelectedYear] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPage, setTotalPage] = useState(0);
-    const [flows, setFlows] = React.useState([]);
-    const [description, setDescription] = React.useState('');
-    const [value, setValue] = React.useState(0);
-    const [type, setType] = React.useState('E');
-    const [balance, setBalance] = React.useState({
+    const [flows, setFlows] = useState([]);
+    const [description, setDescription] = useState('');
+    const [value, setValue] = useState(0);
+    const [type, setType] = useState('E');
+    const [balance, setBalance] = useState({
         in: 0,
         out: 0,
         total: 0
     });
-    const [balanceWithFilter, setBalanceWithFilter] = React.useState({
+    const [balanceWithFilter, setBalanceWithFilter] = useState({
         in: 0,
         out: 0,
         total: 0
@@ -34,7 +34,7 @@ function FlowCash() {
 
     const genericErrorMessage = 'Ocorreu um erro!';
     const timeRemoveNotification = 10000;
-    const [showModalCreateFlow, setShowModalCreateFlow] = React.useState(false);
+    const [showModalCreateFlow, setShowModalCreateFlow] = useState(false);
     const months = {
         EMPTY: '',
         JANUARY: 'Janeiro',
@@ -104,7 +104,7 @@ function FlowCash() {
         }
     }
 
-    useEffect(() => {
+    /*useEffect(() => {
         if (isNaN(id) || Number(id) <= 0) {
             navigate("/caixa");
         } else {
@@ -114,7 +114,7 @@ function FlowCash() {
 
             return () => clearTimeout(delay);
         }
-    }, [id, navigate, selectedMonth, selectedYear, currentPage]);
+    }, [id, navigate, selectedMonth, selectedYear, currentPage]);*/
 
     function backPage() {
         if (currentPage > 0) {
@@ -243,17 +243,11 @@ function FlowCash() {
             <div className="FlowCashHeader">
                 <Header/>
             </div>
-            <CashierGeneralReport
-                cashierId={id}
-                balance={{
-                    in: balance.in,
-                    out: balance.out,
-                    total: balance.total
-                }}
-                balanceWithFilter={{
-                    in: balanceWithFilter.in,
-                    out: balanceWithFilter.out,
-                    total: balanceWithFilter.total
+            <CashFlowReport
+                cashRegisterId={id}
+                filters={{
+                    month: selectedMonth,
+                    year: selectedYear,
                 }}
             />
             <div className="CashFlowBody">
@@ -309,4 +303,4 @@ function FlowCash() {
     );
 }
 
-export default FlowCash;
+export default CashFlow;
