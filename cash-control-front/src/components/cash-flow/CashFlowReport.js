@@ -151,6 +151,9 @@ function CashFlowReport(
                     position: "top-right",
                     autoClose: timeRemoveNotification
                 });
+
+                getGeneralReport();
+                getReportWithFilters();
             }
         });
     }

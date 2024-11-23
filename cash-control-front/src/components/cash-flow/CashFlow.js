@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import Header from "../Header";
 import CashFlowReport from "./CashFlowReport";
 import "../../styles/FlowCash.css";
 import {toast} from "react-toastify";
 import {MdFirstPage, MdLastPage} from "react-icons/md";
+import useApiRequests from "../ApiRequests";
 
 function CashFlow() {
     const {id} = useParams();
@@ -17,16 +18,8 @@ function CashFlow() {
     const [description, setDescription] = useState('');
     const [value, setValue] = useState(0);
     const [type, setType] = useState('E');
-    const [balance, setBalance] = useState({
-        in: 0,
-        out: 0,
-        total: 0
-    });
-    const [balanceWithFilter, setBalanceWithFilter] = useState({
-        in: 0,
-        out: 0,
-        total: 0
-    });
+    const {requestWithAuthentication} = useApiRequests();
+
     const types = {
         E: 'Entrada',
         S: 'Saída'
@@ -52,7 +45,9 @@ function CashFlow() {
     }
 
     const getCashFlow = async () => {
-        let path = `/api/cashflow?initialPage=${currentPage ? currentPage : 0}&cashierId=${id}`;
+        let path = `/cashflow/${id}?initialPage=${currentPage ? currentPage : 0}`;
+
+        console.log(selectedMonth);
 
         if (selectedMonth.length > 0 && selectedMonth !== 'EMPTY' && selectedYear.length > 0) {
             path += `&year=${selectedYear}&month=${selectedMonth}`;
@@ -62,49 +57,19 @@ function CashFlow() {
             path += `&month=${selectedMonth}`;
         }
 
-        const response = await fetch(path, {
-            headers: {
-                Accept: "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-            }
-        });
+        const response = await requestWithAuthentication(path);
 
-        if (response.status === 401 || response.status === 403) {
-            return navigate('/');
-        }
+        if (response.ok) {
+            const data = await response.json();
+            const pagination = data.pagination;
 
-        const data = await response.json();
-
-        if (!response.ok) {
-            const message = data && data.message ? data.message : genericErrorMessage;
-
-            toast.error(message, {position: "top-right", autoClose: timeRemoveNotification});
-        } else {
-            const pagination = data.cashFlow.pagination;
-
-            setFlows(data.cashFlow.data);
+            setFlows(data.data);
             setCurrentPage(pagination.page);
             setTotalPage(pagination.totalPages);
-
-            const balanceGeneral = data.cashFlowWithGeneral;
-            setBalance({
-                in: balanceGeneral.cashInflow,
-                out: balanceGeneral.cashOutflow,
-                total: balanceGeneral.balanceGeneral,
-            });
-
-            const balanceFilters = data.cashFlowWithFilters;
-            setBalanceWithFilter(
-                {
-                    in: balanceFilters.cashInflow,
-                    out: balanceFilters.cashOutflow,
-                    total: balanceFilters.balanceGeneral,
-                }
-            );
         }
     }
 
-    /*useEffect(() => {
+    useEffect(() => {
         if (isNaN(id) || Number(id) <= 0) {
             navigate("/caixa");
         } else {
@@ -114,7 +79,7 @@ function CashFlow() {
 
             return () => clearTimeout(delay);
         }
-    }, [id, navigate, selectedMonth, selectedYear, currentPage]);*/
+    }, [id, navigate, selectedMonth, selectedYear, currentPage]);
 
     function backPage() {
         if (currentPage > 0) {
@@ -246,7 +211,7 @@ function CashFlow() {
             <CashFlowReport
                 cashRegisterId={id}
                 filters={{
-                    month: selectedMonth,
+                    month: selectedMonth === 'EMPTY' ? '' : selectedMonth,
                     year: selectedYear,
                 }}
             />
