@@ -3,35 +3,21 @@ import "../styles/Login.css";
 import {useNavigate} from "react-router-dom";
 import "../styles/Generic.css";
 import {toast, ToastContainer} from "react-toastify";
+import useApiRequests from "./ApiRequests";
 
 const useAuth = () => {
     const navigate = useNavigate();
     const timeToRemoveNotification = 10000;
+    const {requestWithoutAuthentication} = useApiRequests();
 
-    const sendLoginRequest = async (username, password) => {
-        return await fetch(
-            `/api/user/token?username=${username}&password=${btoa(password)}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                }
-            }
-        );
+    const sendLoginRequest = (username, password) => {
+        return requestWithoutAuthentication(`/user/token?username=${username}&password=${btoa(password)}`);
     }
 
-    const createUser = async (username, password) => {
-        return await fetch('/api/user', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username,
-                password: btoa(password),
-            }),
+    const createUser = (username, password) => {
+        return requestWithoutAuthentication('/user', 'POST', {
+            username,
+            password,
         });
     }
 
@@ -41,21 +27,12 @@ const useAuth = () => {
                 toast.success('Usuário cadastrado com sucesso!',
                     {position: "top-right", autoClose: timeToRemoveNotification});
                 setButtonName("Entrar");
-            } else {
-                const data = await response.json();
-
-                toast.error(data.message,
-                    {position: "top-right", autoClose: timeToRemoveNotification});
             }
         } else {
-            const data = await response.json();
-
             if (response.ok) {
+                const data = await response.json();
                 localStorage.setItem("token", data.token);
                 navigate('/caixa');
-            } else {
-                toast.error(data.message,
-                    {position: "top-right", autoClose: timeToRemoveNotification});
             }
         }
     };
@@ -84,20 +61,16 @@ export default function Login() {
         event.preventDefault();
         const {username, password} = formData;
 
-        try {
-            let response;
+        let response;
 
-            if (username && password) {
-                if (buttonName === "Cadastrar") {
-                    response = await createUser(username, password);
-                } else {
-                    response = await sendLoginRequest(username, password);
-                }
-
-                await handleResponse(response, buttonName, setButtonName);
+        if (username && password) {
+            if (buttonName === "Cadastrar") {
+                response = await createUser(username, password);
+            } else {
+                response = await sendLoginRequest(username, password);
             }
-        } catch (error) {
-            console.error(error);
+
+            await handleResponse(response, buttonName, setButtonName);
         }
     };
 
