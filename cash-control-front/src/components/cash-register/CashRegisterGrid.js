@@ -4,7 +4,7 @@ import {MdFirstPage, MdLastPage} from "react-icons/md";
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "../../styles/ModalConfirmation.css";
-import ModalDelete from "../generic_components/ModalDelete";
+import ModalDelete from "../generic-components/ModalDelete";
 import CashRegisterModalCreate from "./CashRegisterModalCreate";
 import CashRegisterTable from "./CashRegisterTable";
 import useApiRequests from "../ApiRequests";

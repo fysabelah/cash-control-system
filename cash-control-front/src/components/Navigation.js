@@ -1,6 +1,6 @@
 import React from "react";
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import CashRegister from "./cash_register/CashRegister";
+import CashRegister from "./cash-register/CashRegister";
 import FlowCash from "./FlowCash";
 import Login from "./Login";
 
