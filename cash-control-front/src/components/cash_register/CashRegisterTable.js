@@ -2,7 +2,7 @@ import React from "react";
 import {FaEdit, FaTrashAlt} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
 
-export default function TableCashier({cashierData, onClickDelete}) {
+export default function CashRegisterTable({cashierData, onClickDelete}) {
 
     const navigate = useNavigate();
 

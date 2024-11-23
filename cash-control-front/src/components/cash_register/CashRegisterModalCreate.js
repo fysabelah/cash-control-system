@@ -1,7 +1,7 @@
 import React from "react";
 import {toast} from "react-toastify";
 
-export default function ModalCreateCashier({onCancel, onConfirm}) {
+export default function CashRegisterModalCreate({onCancel, onConfirm}) {
     const [formData, setFormData] = React.useState({
         description: "",
         balance: 0.0

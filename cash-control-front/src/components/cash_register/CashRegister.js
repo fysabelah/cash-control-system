@@ -1,19 +1,19 @@
 import React from 'react';
-import CashierGrid from "./CashierGrid";
-import Header from "./Header";
-import "../styles/PageWithTable.css";
+import CashRegisterGrid from "./CashRegisterGrid";
+import Header from "../Header";
+import "../../styles/PageWithTable.css";
 
-function Cashier() {
+function CashRegister() {
     return (
         <div className="PageWithTable">
             <div className="PageTableHeader">
                 <Header/>
             </div>
             <div className="Table">
-                <CashierGrid/>
+                <CashRegisterGrid/>
             </div>
         </div>
     );
 }
 
-export default Cashier;
+export default CashRegister;

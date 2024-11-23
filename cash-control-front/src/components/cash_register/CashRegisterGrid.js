@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import "../styles/CashierGrid.css";
+import "../../styles/CashierGrid.css";
 import {MdFirstPage, MdLastPage} from "react-icons/md";
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import "../styles/ModalConfirmation.css";
-import ModalDelete from "./generic_components/ModalDelete";
-import ModalCreateCashier from "./cashier_items/ModalCreateCashier";
-import TableCashier from "./cashier_items/TableCashier";
-import useApiRequests from "./ApiRequests";
+import "../../styles/ModalConfirmation.css";
+import ModalDelete from "../generic_components/ModalDelete";
+import CashRegisterModalCreate from "./CashRegisterModalCreate";
+import CashRegisterTable from "./CashRegisterTable";
+import useApiRequests from "../ApiRequests";
 
-function CashierGrid() {
+function CashRegisterGrid() {
     const [cashier, setCashier] = useState([]);
     const [showModalDelete, setShowModalDelete] = useState(false);
     const [cashierIdToDelete, setCashierIdToDelete] = useState(null);
@@ -172,7 +172,7 @@ function CashierGrid() {
                 </div>
             </div>
             <div className="CashierTable">
-                <TableCashier
+                <CashRegisterTable
                     cashierData={cashier}
                     onClickDelete={openModalDelete}
                 />
@@ -188,7 +188,7 @@ function CashierGrid() {
                              onCancel={handleModalDeleteState}
                 />}
             {showModalCreate &&
-                <ModalCreateCashier
+                <CashRegisterModalCreate
                     onCancel={handleModalCreateState}
                     onConfirm={insertCashier}
                 />}
@@ -196,4 +196,4 @@ function CashierGrid() {
     );
 }
 
-export default CashierGrid;
+export default CashRegisterGrid;
