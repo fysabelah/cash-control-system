@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigate} from "react-router-dom";
 import "../styles/CashierGrid.css";
 import {MdFirstPage, MdLastPage} from "react-icons/md";
 import {toast, ToastContainer} from 'react-toastify';
@@ -8,21 +7,23 @@ import "../styles/ModalConfirmation.css";
 import ModalDelete from "./generic_components/ModalDelete";
 import ModalCreateCashier from "./cashier_items/ModalCreateCashier";
 import TableCashier from "./cashier_items/TableCashier";
+import useApiRequests from "./ApiRequests";
 
 function CashierGrid() {
     const [cashier, setCashier] = useState([]);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [totalPage, setTotalPage] = useState(0);
-    const navigate = useNavigate();
     const [showModalDelete, setShowModalDelete] = useState(false);
-    const [cashierIdToDelete, setCashierIdToDelete] = React.useState(null);
-    const genericErrorMessage = 'Ocorreu um erro!';
+    const [cashierIdToDelete, setCashierIdToDelete] = useState(null);
     const timeRemoveNotification = 10000;
-    const [showModalCreate, setShowModalCreate] = React.useState(false);
-    const [dataQuery, setDataQuery] = React.useState({
+    const [showModalCreate, setShowModalCreate] = useState(false);
+    const [dataQuery, setDataQuery] = useState({
         id: "",
         description: ""
     });
+    const [pagination, setPagination] = useState({
+        currentPage: 0,
+        totalPage: 0
+    })
+    const {requestWithAuthentication} = useApiRequests();
 
     const handleChangeQueryParams = (event) => {
         const {name, value} = event.target;
@@ -33,50 +34,51 @@ function CashierGrid() {
         }));
     }
 
+    const useDebounce = (value, delay) => {
+        const [debouncedValue, setDebouncedValue] = useState(value);
+
+        useEffect(() => {
+            const handler = setTimeout(() => {
+                setDebouncedValue(value);
+            }, delay);
+
+            return () => {
+                clearTimeout(handler);
+            };
+        }, [value, delay]);
+
+        return debouncedValue;
+    };
+
     const getCashiers = async () => {
-        let path = `/api/cashier?initialPage=${currentPage ? currentPage : 0}`;
+        let url = `/cashier?initialPage=${pagination.currentPage}`;
 
         if (dataQuery.id.length > 0 && dataQuery.description.length > 0) {
-            path += `&cashierId=${dataQuery.id}&description=${dataQuery.description}`;
+            url += `&cashierId=${dataQuery.id}&description=${dataQuery.description}`;
         } else if (dataQuery.id.length > 0) {
-            path += `&cashierId=${dataQuery.id}`;
+            url += `&cashierId=${dataQuery.id}`;
         } else if (dataQuery.description.length > 0) {
-            path += `&description=${dataQuery.description}`;
+            url += `&description=${dataQuery.description}`;
         }
 
-        const response = await fetch(path, {
-            headers: {
-                Accept: "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-            }
-        });
-
-        if (response.status === 401 || response.status === 403) {
-            return navigate('/login');
-        }
-
+        const response = await requestWithAuthentication(url);
         const data = await response.json();
 
-        if (!response.ok) {
-            const message = data && data.message ? data.message : genericErrorMessage;
-
-            toast.error(message, {position: "top-right", autoClose: timeRemoveNotification});
-        } else {
-            setCashier(data ? data.data : []);
-            const page = data ? data.pagination : {'page': 0, 'totalPages': 0};
-            setCurrentPage(page.page);
-            setTotalPage(page.totalPages);
+        if (response.ok) {
+            setCashier(data.data);
+            setPagination({
+                currentPage: data.pagination.page,
+                totalPage: data.pagination.totalPages
+            });
         }
     }
 
+    const debouncedDataQuery = useDebounce(dataQuery, 500);
+    const debouncedCurrentPage = useDebounce(pagination.currentPage, 500);
+
     useEffect(() => {
-        const delay = setTimeout(() => {
-            getCashiers();
-        }, 500);
-
-        return () => clearTimeout(delay);
-
-    }, [dataQuery, currentPage]);
+        getCashiers();
+    }, [debouncedDataQuery, debouncedCurrentPage]);
 
     function openModalDelete(cashierId) {
         setShowModalDelete(true);
@@ -84,54 +86,38 @@ function CashierGrid() {
     }
 
     const insertCashier = async (formData) => {
-        setShowModalCreate(false);
-
-        try {
-            const response = await fetch(`/api/cashier`, {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    description: formData.description,
-                    balance: formData.balance,
-                })
-            });
-
-            if (response.status === 401 || response.status === 403) {
-                return navigate("/login");
-            }
-
-            if (!response.ok) {
-                const data = await response.json();
-
-                const message = data && data.message ? data.message : genericErrorMessage;
-
-                toast.error(message, {position: "top-right", autoClose: timeRemoveNotification});
-            } else {
+        requestWithAuthentication('/cashier', 'POST', {
+            description: formData.description,
+            balance: formData.balance,
+        }).then(response => {
+            if (response.ok) {
                 toast.success('Caixa cadastrado com sucesso!', {
                     position: "top-right",
                     autoClose: timeRemoveNotification
                 });
 
-                await getCashiers();
+                setShowModalCreate(false);
+
+                getCashiers();
             }
-        } catch (error) {
-            toast.error(genericErrorMessage, {position: "top-right", autoClose: timeRemoveNotification});
-        }
+        });
     };
 
     function backPage() {
-        if (currentPage > 0) {
-            setCurrentPage(currentPage - 1);
+        if (pagination.currentPage > 0) {
+            setPagination((prev) => ({
+                ...prev,
+                currentPage: prev.currentPage - 1,
+            }));
         }
     }
 
     function nextPage() {
-        if (currentPage + 1 < totalPage) {
-            setCurrentPage(currentPage + 1);
+        if (pagination.currentPage + 1 < pagination.totalPage) {
+            setPagination(prev => ({
+                ...prev,
+                currentPage: prev.currentPage + 1
+            }));
         }
     }
 
@@ -146,38 +132,19 @@ function CashierGrid() {
     const executeDeleteCashier = async () => {
         if (cashierIdToDelete == null) return;
 
-        setShowModalDelete(false);
+        requestWithAuthentication(`/cashier/${cashierIdToDelete}`, 'DELETE')
+            .then(response => {
+                if (response.ok) {
+                    setShowModalDelete(false);
 
-        try {
-            const response = await fetch(`/api/cashier/${cashierIdToDelete}`, {
-                method: 'DELETE',
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    toast.success('Caixa deletado com sucesso!', {
+                        position: "top-right",
+                        autoClose: timeRemoveNotification
+                    });
+
+                    getCashiers();
                 }
             });
-
-            if (response.status === 401 || response.status === 403) {
-                return navigate("/login");
-            }
-
-            if (!response.ok) {
-                const data = await response.json();
-
-                const message = data && data.message ? data.message : genericErrorMessage;
-
-                toast.error(message, {position: "top-right", autoClose: timeRemoveNotification});
-            } else {
-                toast.success('Caixa deletado com sucesso!', {
-                    position: "top-right",
-                    autoClose: timeRemoveNotification
-                });
-
-                await getCashiers();
-            }
-        } catch (error) {
-            toast.error(genericErrorMessage, {position: "top-right", autoClose: timeRemoveNotification});
-        }
     };
 
     return (
