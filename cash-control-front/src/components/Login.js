@@ -12,14 +12,14 @@ const useAuth = () => {
 
     const sendLoginRequest = (username, password) => {
         return requestWithoutAuthentication(`/user/token?username=${username}&password=${btoa(password)}`);
-    }
+    };
 
     const createUser = (username, password) => {
         return requestWithoutAuthentication('/user', 'POST', {
             username,
             password,
         });
-    }
+    };
 
     const handleResponse = async (response, buttonName, setButtonName) => {
         if (buttonName === "Cadastrar") {

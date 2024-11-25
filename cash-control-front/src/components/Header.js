@@ -7,12 +7,12 @@ const useHeader = () => {
 
     const goToHome = () => {
         navigate('/caixa');
-    }
+    };
 
     const logout = () => {
         localStorage.removeItem("token");
         navigate('/login');
-    }
+    };
 
     return {goToHome, logout};
 }
