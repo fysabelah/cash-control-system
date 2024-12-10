@@ -7,7 +7,8 @@ import "../../styles/ModalConfirmation.css";
 import ModalDelete from "../generic-components/ModalDelete";
 import CashRegisterModalCreate from "./CashRegisterModalCreate";
 import CashRegisterTable from "./CashRegisterTable";
-import useApiRequests from "../ApiRequests";
+import useApiRequests from "../../hooks/useApiRequests";
+import useDebounce from "../../hooks/useDebounce";
 
 function CashRegisterGrid() {
     const [cashier, setCashier] = useState([]);
@@ -33,22 +34,6 @@ function CashRegisterGrid() {
             [name]: value,
         }));
     }
-
-    const useDebounce = (value, delay) => {
-        const [debouncedValue, setDebouncedValue] = useState(value);
-
-        useEffect(() => {
-            const handler = setTimeout(() => {
-                setDebouncedValue(value);
-            }, delay);
-
-            return () => {
-                clearTimeout(handler);
-            };
-        }, [value, delay]);
-
-        return debouncedValue;
-    };
 
     const getCashiers = async () => {
         let url = `/cashier?initialPage=${pagination.currentPage}`;

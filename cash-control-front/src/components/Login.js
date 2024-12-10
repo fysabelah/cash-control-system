@@ -3,7 +3,7 @@ import "../styles/Login.css";
 import {useNavigate} from "react-router-dom";
 import "../styles/Generic.css";
 import {toast, ToastContainer} from "react-toastify";
-import useApiRequests from "./ApiRequests";
+import useApiRequests from "../hooks/useApiRequests";
 
 const useAuth = () => {
     const navigate = useNavigate();

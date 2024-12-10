@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import useApiRequests from "../ApiRequests";
+import useApiRequests from "../../hooks/useApiRequests";
 
 
 function CashFlowReport(
@@ -79,7 +79,7 @@ function CashFlowReport(
         }
 
         if (filters.year.length > 0) {
-            url += url.includes("month") ? url += "&" : "?";
+            url += url.includes("month") ? "&" : "?";
 
             url += `year=${filters.year}`;
         }

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Header from "../Header";
 import "../../styles/FlowCash.css"
-import useApiRequests from "../ApiRequests";
+import useApiRequests from "../../hooks/useApiRequests";
 import {useNavigate, useParams} from "react-router-dom";
 import CashFlowReport from "./CashFlowReport";
 import CashRegisterDetailsFilters from "./CashRegisterDetailsFilters";
@@ -46,7 +46,7 @@ export default function CashRegisterDetails() {
         if (Number.isNaN(id) || Number(id) < 0) {
             navigate("/caixa");
         } else {
-            setFilter(prev => ({
+            setFilter((prev) => ({
                 ...prev,
                 cashRegisterId: id
             }));
@@ -54,7 +54,7 @@ export default function CashRegisterDetails() {
     }, [id, navigate]);
 
     useEffect(() => {
-        console.log(filter);
+        console.log(`filtros ${filter.month} ${filter.year} ${filter.cashRegisterId}`);
     }, [filter, filter.cashRegisterId]);
 
     return (

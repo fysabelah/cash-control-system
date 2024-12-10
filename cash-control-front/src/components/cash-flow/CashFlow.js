@@ -5,7 +5,7 @@ import CashFlowReport from "./CashFlowReport";
 import "../../styles/FlowCash.css";
 import {toast} from "react-toastify";
 import {MdFirstPage, MdLastPage} from "react-icons/md";
-import useApiRequests from "../ApiRequests";
+import useApiRequests from "../../hooks/useApiRequests";
 
 function CashFlow() {
     const {id} = useParams();
